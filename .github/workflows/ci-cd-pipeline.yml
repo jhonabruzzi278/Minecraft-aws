@@ -105,8 +105,8 @@ jobs:
 
       - name: 📋 Publicar Ficha Técnica en el Resumen de GitHub Actions (Job Summary)
         run: |
-          BUCKET_NAME="${{ secrets.FRONTEND_S3_BUCKET }}"
-          [ -z "$BUCKET_NAME" ] && BUCKET_NAME="cf-duoc-cloud-native-frontendwebsitebucket-t1v4j7neddlu"
+          BUCKET_PUB="${{ vars.FRONTEND_S3_BUCKET }}"
+          [ -z "$BUCKET_PUB" ] && BUCKET_PUB="cf-duoc-cloud-native-frontendwebsitebucket-t1v4j7neddlu"
 
           cat << EOF >> $GITHUB_STEP_SUMMARY
           # 🎮 Ficha Técnica y Puntos de Acceso • Cloud Native Duoc UC
@@ -115,7 +115,8 @@ jobs:
 
           | Servicio | Tipo | URL / Dirección | Estado |
           |---|---|---|---|
-          | **Panel Web Dashboard** | Amazon S3 Website | [http://${BUCKET_NAME}.s3-website-us-east-1.amazonaws.com](http://${BUCKET_NAME}.s3-website-us-east-1.amazonaws.com) | 🟢 **HTTP 200 OK** |
+          | **Panel Web Dashboard** | Amazon S3 Website | [http://${BUCKET_PUB}.s3-website-us-east-1.amazonaws.com](http://${BUCKET_PUB}.s3-website-us-east-1.amazonaws.com) | 🟢 **HTTP 200 OK** |
+
           | **Servidor Minecraft** | Purpur 1.21.4 (Java) | \`18.215.185.57:25565\` | 🟢 **Online (Multiversión 1.20 a 1.21.4+)** |
           | **Backend REST API** | Flask (EC2 Privada) | \`http://18.215.185.57:8081/api/saludo\` | 🟢 **Online (DynamoDB Activo)** |
           | **Base de Datos NoSQL** | Amazon DynamoDB | Tabla: \`UsuariosMinecraft\` | 🟢 **Persistido** |

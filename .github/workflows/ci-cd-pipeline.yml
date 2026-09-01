@@ -82,32 +82,23 @@ jobs:
 
       - name: 🌐 Publicar Frontend en Amazon S3 Website Hosting
         run: |
-          BUCKET_NAME="${{ secrets.FRONTEND_S3_BUCKET }}"
-          if [ -n "$BUCKET_NAME" ]; then
-            echo "Sincronizando frontend con s3://$BUCKET_NAME/ ..."
-            aws s3 sync frontend/ s3://$BUCKET_NAME/ --delete
-          else
-            echo "Secret FRONTEND_S3_BUCKET no configurado. Omitiendo sync de S3."
-          fi
+          BUCKET_NAME="${{ vars.FRONTEND_S3_BUCKET || secrets.FRONTEND_S3_BUCKET || 'cf-duoc-cloud-native-frontendwebsitebucket-t1v4j7neddlu' }}"
+          echo "Sincronizando frontend con s3://$BUCKET_NAME/ ..."
+          aws s3 sync frontend/ s3://$BUCKET_NAME/ --delete
 
       - name: 🐳 Actualizar Backend en EC2 vía AWS SSM (Sin SSH)
         run: |
-          INSTANCE_ID="${{ secrets.BACKEND_EC2_INSTANCE_ID }}"
-          if [ -n "$INSTANCE_ID" ]; then
-            echo "Enviando comando de actualización a EC2 $INSTANCE_ID vía SSM..."
-            aws ssm send-command \
-              --instance-ids "$INSTANCE_ID" \
-              --document-name "AWS-RunShellScript" \
-              --parameters 'commands=["cd /opt/backend && systemctl restart flask-backend"]'
-          else
-            echo "Secret BACKEND_EC2_INSTANCE_ID no configurado. Omitiendo SSM dispatch."
-          fi
+          INSTANCE_ID="${{ secrets.BACKEND_EC2_INSTANCE_ID || vars.BACKEND_EC2_INSTANCE_ID || 'i-0dfed23a838b96dcc' }}"
+          echo "Enviando comando de actualización a EC2 $INSTANCE_ID vía SSM..."
+          aws ssm send-command \
+            --instance-ids "$INSTANCE_ID" \
+            --document-name "AWS-RunShellScript" \
+            --parameters 'commands=["cd /opt/backend && systemctl restart flask-backend"]'
 
       - name: 📋 Publicar Ficha Técnica en el Resumen de GitHub Actions (Job Summary)
         run: |
-          B1="cf-duoc-cloud-native-frontendwebsite"
-          B2="bucket-t1v4j7neddlu"
-          WEB_URL="http://${B1}${B2}.s3-website-us-east-1.amazonaws.com"
+          BUCKET_NAME="${{ vars.FRONTEND_S3_BUCKET || 'cf-duoc-cloud-native-frontendwebsitebucket-t1v4j7neddlu' }}"
+          WEB_URL="http://${BUCKET_NAME}.s3-website-us-east-1.amazonaws.com"
 
           cat << EOF >> $GITHUB_STEP_SUMMARY
           # 🎮 Ficha Técnica y Puntos de Acceso • Cloud Native Duoc UC
@@ -116,12 +107,11 @@ jobs:
 
           | Servicio | Tipo | URL / Dirección | Estado |
           |---|---|---|---|
-          | **Panel Web Dashboard** | Amazon S3 Website | [Abrir Sitio Web](${WEB_URL})<br><code>${WEB_URL}</code> | 🟢 **HTTP 200 OK** |
-
-
+          | **Panel Web Dashboard** | Amazon S3 Website | [${WEB_URL}](${WEB_URL}) | 🟢 **HTTP 200 OK** |
           | **Servidor Minecraft** | Purpur 1.21.4 (Java) | \`18.215.185.57:25565\` | 🟢 **Online (Multiversión 1.20 a 1.21.4+)** |
           | **Backend REST API** | Flask (EC2 Privada) | \`http://18.215.185.57:8081/api/saludo\` | 🟢 **Online (DynamoDB Activo)** |
           | **Base de Datos NoSQL** | Amazon DynamoDB | Tabla: \`UsuariosMinecraft\` | 🟢 **Persistido** |
+
 
           ---
 

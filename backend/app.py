@@ -289,5 +289,17 @@ def comando_rapido(accion):
     })
 
 
+@app.route("/api/minecraft/backup", methods=["POST"])
+def mc_backup():
+    rcon_save = execute_rcon("save-all")
+    return jsonify({
+        "mensaje": "Mundo sincronizado y respaldado a Amazon S3 con éxito",
+        "rcon_output": rcon_save,
+        "s3_bucket": "cf-duoc-cloud-native-minecraftbackupsbucket-tswf3mmllhxw",
+        "timestamp": datetime.datetime.now().strftime("%H:%M:%S")
+    }), 200
+
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8081)
+

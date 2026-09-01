@@ -303,11 +303,15 @@ async function consultarEstadoMinecraft() {
         const res = await fetch(`${API_BASE_URL}/api/minecraft/status`);
         if (!res.ok) throw new Error("No se pudo obtener el estado");
         const data = await res.json();
+        if (data.minecraft_ip && mcIpText) {
+            mcIpText.textContent = data.minecraft_ip;
+        }
         mcPlayersBox.textContent = `[RCON State]\nJugadores: ${data.jugadores || "Sin jugadores"}\nTPS: ${data.tps || "20.0 (Estable)"}`;
     } catch (error) {
         mcPlayersBox.textContent = `⚠️ Error de conexión RCON (${error.message})`;
     }
 }
+
 
 // Event Listeners
 btnConsultar.addEventListener("click", obtenerUsuarios);

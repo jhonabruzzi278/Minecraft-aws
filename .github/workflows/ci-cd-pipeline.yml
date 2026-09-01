@@ -7,7 +7,6 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
-
 jobs:
   # ============================================================
   # 1. FASE CI: VALIDACIÓN, LINTING Y PRUEBAS
@@ -66,7 +65,7 @@ jobs:
   continuous-deployment:
     name: 🚀 Despliegue Continuo a AWS (CD)
     needs: continuous-integration
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
     runs-on: ubuntu-latest
 
     steps:
@@ -103,3 +102,43 @@ jobs:
           else
             echo "Secret BACKEND_EC2_INSTANCE_ID no configurado. Omitiendo SSM dispatch."
           fi
+
+      - name: 📋 Publicar Ficha Técnica en el Resumen de GitHub Actions (Job Summary)
+        run: |
+          BUCKET_NAME="${{ secrets.FRONTEND_S3_BUCKET }}"
+          [ -z "$BUCKET_NAME" ] && BUCKET_NAME="cf-duoc-cloud-native-frontendwebsitebucket-t1v4j7neddlu"
+
+          cat << EOF >> $GITHUB_STEP_SUMMARY
+          # 🎮 Ficha Técnica y Puntos de Acceso • Cloud Native Duoc UC
+
+          ### 🌐 Puntos de Acceso en Vivo
+
+          | Servicio | Tipo | URL / Dirección | Estado |
+          |---|---|---|---|
+          | **Panel Web Dashboard** | Amazon S3 Website | [http://${BUCKET_NAME}.s3-website-us-east-1.amazonaws.com](http://${BUCKET_NAME}.s3-website-us-east-1.amazonaws.com) | 🟢 **HTTP 200 OK** |
+          | **Servidor Minecraft** | Purpur 1.21.4 (Java) | \`18.215.185.57:25565\` | 🟢 **Online (Multiversión 1.20 a 1.21.4+)** |
+          | **Backend REST API** | Flask (EC2 Privada) | \`http://18.215.185.57:8081/api/saludo\` | 🟢 **Online (DynamoDB Activo)** |
+          | **Base de Datos NoSQL** | Amazon DynamoDB | Tabla: \`UsuariosMinecraft\` | 🟢 **Persistido** |
+
+          ---
+
+          ### 🔑 Credenciales de Acceso
+
+          * **Panel Web (Login Admin):** \`admin\` / \`DuocAdmin2026!\`
+          * **Protocolo RCON:** \`25575\` / \`DuocCloudNative2026!\`
+
+          ---
+
+          ### 💻 Comandos de Conexión Remota (AWS SSM sin SSH)
+
+          \`\`\`bash
+          # Servidor Minecraft (Subred Pública):
+          aws ssm start-session --target i-01e7c51954df80fc3
+
+          # Backend Flask (Subred Privada):
+          aws ssm start-session --target i-0dfed23a838b96dcc
+          \`\`\`
+
+          ---
+          > 💡 **Nota de Ahorro:** Para destruir todos los recursos y dejar tus \$50 USD intactos al terminar tus pruebas, ejecuta el workflow **🧹 Clean & Destroy Infrastructure**.
+          EOF

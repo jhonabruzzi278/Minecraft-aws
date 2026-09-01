@@ -3,24 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Flujo de Diagnóstico y Resolución de Errores</title>
+  <title>Flujo de Diagnóstico y Resolución de Errores - Duoc UC</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600&family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --paper: #0f111a;
-      --paper-card: #181b26;
-      --ink: #f0f2f8;
-      --ink-muted: #8c93a8;
-      --accent: #eb6c36;
-      --accent-soft: rgba(235, 108, 54, 0.12);
+      --paper: #07090e;
+      --paper-card: #0f1422;
+      --ink: #f8fafc;
+      --ink-muted: #94a3b8;
+      --accent: #f97316;
+      --accent-soft: rgba(249, 115, 22, 0.15);
       --teal: #38bdf8;
       --green: #4ade80;
       --red: #f87171;
-      --border: rgba(240, 242, 248, 0.1);
-      --font-sans: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
-      --font-mono: 'Geist Mono', monospace;
+      --border: rgba(255, 255, 255, 0.12);
+      --font-sans: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -31,64 +31,85 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
       min-height: 100vh;
-      padding: 2rem;
+      padding: 2rem 1.5rem;
     }
 
     .diagram-card {
       background: var(--paper-card);
       border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 2rem;
-      max-width: 960px;
+      border-radius: 20px;
+      padding: 2.5rem;
+      max-width: 1480px;
       width: 100%;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
     }
 
     .header {
-      margin-bottom: 1.5rem;
+      margin-bottom: 2rem;
       display: flex;
       justify-content: space-between;
-      align-items: flex-start;
+      align-items: center;
       border-bottom: 1px solid var(--border);
-      padding-bottom: 1rem;
+      padding-bottom: 1.5rem;
+      flex-wrap: wrap;
+      gap: 1rem;
     }
 
     .eyebrow {
       font-family: var(--font-mono);
-      font-size: 0.75rem;
+      font-size: 0.85rem;
+      font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.15em;
       color: var(--accent);
-      margin-bottom: 0.25rem;
+      margin-bottom: 0.4rem;
     }
 
     h1 {
-      font-size: 1.4rem;
-      font-weight: 600;
+      font-size: 1.8rem;
+      font-weight: 800;
       letter-spacing: -0.02em;
+    }
+
+    .meta-tags {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
     }
 
     .meta-tag {
       font-family: var(--font-mono);
-      font-size: 0.75rem;
+      font-size: 0.85rem;
+      font-weight: 600;
       background: var(--accent-soft);
       color: var(--accent);
-      padding: 0.35rem 0.75rem;
-      border-radius: 999px;
+      padding: 0.45rem 1rem;
+      border-radius: 30px;
       border: 1px solid var(--accent);
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .meta-tag:hover {
+      background: var(--accent);
+      color: #fff;
     }
 
     .svg-container {
       width: 100%;
       overflow-x: auto;
+      background: rgba(0, 0, 0, 0.25);
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 1rem;
     }
 
     svg {
       display: block;
       width: 100%;
       height: auto;
+      min-width: 1100px;
     }
   </style>
 </head>
@@ -97,112 +118,122 @@
   <div class="diagram-card">
     <div class="header">
       <div>
-        <div class="eyebrow">TROUBLESHOOTING RUNBOOK • DIAGNÓSTICO</div>
-        <h1>Resolución de Errores de Conexión y Compatibilidad</h1>
+        <div class="eyebrow">TROUBLESHOOTING RUNBOOK • DIAGNÓSTICO & RESOLUCIÓN</div>
+        <h1>Resolución de Errores Críticos: Firewall, Java G1GC y Redes</h1>
       </div>
-      <div style="display: flex; gap: 0.5rem;">
-        <a href="index.html" class="meta-tag" style="text-decoration: none; cursor: pointer;">← Galería</a>
+      <div class="meta-tags">
+        <a href="index.html" class="meta-tag">← Volver a la Galería</a>
         <span class="meta-tag">Metodología DevOps</span>
       </div>
-
     </div>
 
     <div class="svg-container">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 500" width="880" height="500">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1140 560" width="1140" height="560">
         <defs>
-          <marker id="arrow" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-            <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#8c93a8"/>
+          <marker id="arr-gray" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#94a3b8"/>
           </marker>
-          <marker id="arrow-green" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <marker id="arr-green" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
             <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#4ade80"/>
           </marker>
-          <marker id="arrow-red" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <marker id="arr-red" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
             <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#f87171"/>
           </marker>
         </defs>
 
-        <!-- ==================== FASE 1: ERROR GETSOCKOPT (FIREWALL) ==================== -->
-        
-        <!-- Bloque 1: Intento inicial -->
+        <!-- ==================== FILA 1: CASO 1 - ERROR GETSOCKOPT ==================== -->
+        <text x="40" y="32" fill="#38bdf8" font-size="13" font-family="'JetBrains Mono', monospace" font-weight="700">CASO 1: ERROR DE TIMEOUT EN CONEXIÓN MINECRAFT (GETSOCKOPT)</text>
+
+        <!-- Paso 1: Intento -->
         <g transform="translate(40, 50)">
-          <rect width="180" height="70" rx="8" fill="#181b26" stroke="rgba(240,242,248,0.2)" stroke-width="1.2"/>
-          <text x="90" y="26" fill="#f0f2f8" font-size="10" font-family="'Geist', sans-serif" font-weight="600" text-anchor="middle">1. Intento de Conexión</text>
-          <text x="90" y="44" fill="#8c93a8" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">Cliente Minecraft ➔ 54.81.175.12</text>
-          <text x="90" y="58" fill="#38bdf8" font-size="7.5" font-family="'Geist Mono', monospace" text-anchor="middle">Puerto: 25565 TCP</text>
+          <rect width="260" height="95" rx="10" fill="#131826" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
+          <text x="130" y="30" fill="#f8fafc" font-size="14" font-family="'Outfit', sans-serif" font-weight="700" text-anchor="middle">1. Intento de Conexión</text>
+          <text x="130" y="54" fill="#94a3b8" font-size="12" font-family="'JetBrains Mono', monospace" text-anchor="middle">Cliente Minecraft ➔ IP EC2</text>
+          <text x="130" y="74" fill="#38bdf8" font-size="11.5" font-family="'JetBrains Mono', monospace" text-anchor="middle">Puerto: 25565 TCP/UDP</text>
         </g>
 
-        <!-- Flecha 1 -> 2 -->
-        <path d="M 220 85 H 270" fill="none" stroke="#f87171" stroke-width="1.5" marker-end="url(#arrow-red)"/>
+        <!-- Flecha 1 -> 2 (Fallo) -->
+        <path d="M 300 97 H 365" fill="none" stroke="#f87171" stroke-width="2.5" marker-end="url(#arr-red)"/>
 
-        <!-- Bloque 2: Error getsockopt -->
-        <g transform="translate(280, 50)">
-          <rect width="200" height="70" rx="8" fill="#2a1b1e" stroke="#f87171" stroke-width="1.5"/>
-          <text x="100" y="24" fill="#f87171" font-size="10" font-family="'Geist', sans-serif" font-weight="700" text-anchor="middle">⚠️ Error de Timeout</text>
-          <text x="100" y="42" fill="#f0f2f8" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">Connection timed out</text>
-          <text x="100" y="56" fill="#8c93a8" font-size="7.5" font-family="'Geist Mono', monospace" text-anchor="middle">Causa: iptables REJECT en Linux</text>
+        <!-- Paso 2: Error -->
+        <g transform="translate(380, 50)">
+          <rect width="290" height="95" rx="10" fill="#2d1519" stroke="#f87171" stroke-width="2"/>
+          <text x="145" y="30" fill="#f87171" font-size="14" font-family="'Outfit', sans-serif" font-weight="800" text-anchor="middle">⚠️ Error getsockopt</text>
+          <text x="145" y="54" fill="#f8fafc" font-size="12" font-family="'JetBrains Mono', monospace" text-anchor="middle">Connection timed out: getsockopt</text>
+          <text x="145" y="74" fill="#94a3b8" font-size="11.5" font-family="'JetBrains Mono', monospace" text-anchor="middle">Causa: Regla REJECT en iptables</text>
         </g>
 
-        <!-- Flecha 2 -> 3 -->
-        <path d="M 480 85 H 530" fill="none" stroke="#8c93a8" stroke-width="1.5" marker-end="url(#arrow)"/>
+        <!-- Flecha 2 -> 3 (Solución) -->
+        <path d="M 670 97 H 735" fill="none" stroke="#4ade80" stroke-width="2.5" marker-end="url(#arr-green)"/>
 
-        <!-- Bloque 3: Diagnóstico y Solución Firewall -->
-        <g transform="translate(540, 45)">
-          <rect width="280" height="80" rx="8" fill="#181b26" stroke="#4ade80" stroke-width="1.5"/>
-          <text x="14" y="22" fill="#4ade80" font-size="9" font-family="'Geist Mono', monospace" font-weight="700">✓ SOLUCIÓN FIREWALL (IPTABLES)</text>
-          <text x="14" y="40" fill="#f0f2f8" font-size="8" font-family="'Geist Mono', monospace">• iptables -I INPUT 1 -p tcp --dport 25565 -j ACCEPT</text>
-          <text x="14" y="54" fill="#f0f2f8" font-size="8" font-family="'Geist Mono', monospace">• iptables-save > /etc/sysconfig/iptables</text>
-          <text x="14" y="68" fill="#8c93a8" font-size="7.5" font-family="'Geist Mono', monospace">Validado con Test-NetConnection (True)</text>
+        <!-- Paso 3: Solución -->
+        <g transform="translate(750, 50)">
+          <rect width="350" height="95" rx="10" fill="#11291d" stroke="#4ade80" stroke-width="2"/>
+          <text x="175" y="30" fill="#4ade80" font-size="14" font-family="'Outfit', sans-serif" font-weight="800" text-anchor="middle">✓ Solución Aplicada (iptables)</text>
+          <text x="175" y="54" fill="#f8fafc" font-size="11.5" font-family="'JetBrains Mono', monospace" text-anchor="middle">iptables -I INPUT 1 -p tcp --dport 25565 -j ACCEPT</text>
+          <text x="175" y="74" fill="#4ade80" font-size="11.5" font-family="'JetBrains Mono', monospace" text-anchor="middle">Resultado: Tráfico Aceptado (20.0 TPS)</text>
         </g>
 
-        <!-- Conector hacia abajo a Fase 2 -->
-        <path d="M 680 125 V 200 Q 680 210 670 210 H 130 Q 120 210 120 220 V 240" fill="none" stroke="#8c93a8" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <!-- ==================== FILA 2: CASO 2 - CRASH POR MEMORIA (OOM KILLER) ==================== -->
+        <text x="40" y="195" fill="#f97316" font-size="13" font-family="'JetBrains Mono', monospace" font-weight="700">CASO 2: COLAPSO DE PROCESO JAVA POR AGOTAMIENTO DE RAM (OOM)</text>
 
-
-        <!-- ==================== FASE 2: ERROR DE VERSIÓN (OUTDATED SERVER) ==================== -->
-
-        <!-- Bloque 4: Segundo intento -->
-        <g transform="translate(40, 250)">
-          <rect width="180" height="70" rx="8" fill="#181b26" stroke="rgba(240,242,248,0.2)" stroke-width="1.2"/>
-          <text x="90" y="26" fill="#f0f2f8" font-size="10" font-family="'Geist', sans-serif" font-weight="600" text-anchor="middle">2. Tráfico Llega al Servidor</text>
-          <text x="90" y="44" fill="#4ade80" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">Handshake TCP Exitoso</text>
-          <text x="90" y="58" fill="#8c93a8" font-size="7.5" font-family="'Geist Mono', monospace" text-anchor="middle">Validación de Protocolo Minecraft</text>
+        <!-- Paso 1: Intento -->
+        <g transform="translate(40, 215)">
+          <rect width="260" height="95" rx="10" fill="#131826" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
+          <text x="130" y="30" fill="#f8fafc" font-size="14" font-family="'Outfit', sans-serif" font-weight="700" text-anchor="middle">1. Arranque sin Parámetros</text>
+          <text x="130" y="54" fill="#94a3b8" font-size="12" font-family="'JetBrains Mono', monospace" text-anchor="middle">java -jar purpur.jar</text>
+          <text x="130" y="74" fill="#f97316" font-size="11.5" font-family="'JetBrains Mono', monospace" text-anchor="middle">Instancia t2.micro (1GB RAM)</text>
         </g>
 
-        <!-- Flecha 4 -> 5 -->
-        <path d="M 220 285 H 270" fill="none" stroke="#eb6c36" stroke-width="1.5" marker-end="url(#arrow)"/>
+        <path d="M 300 262 H 365" fill="none" stroke="#f87171" stroke-width="2.5" marker-end="url(#arr-red)"/>
 
-        <!-- Bloque 5: Error Outdated Server -->
-        <g transform="translate(280, 250)">
-          <rect width="200" height="70" rx="8" fill="#2a1f1b" stroke="#eb6c36" stroke-width="1.5"/>
-          <text x="100" y="24" fill="#eb6c36" font-size="10" font-family="'Geist', sans-serif" font-weight="700" text-anchor="middle">⚠️ Versión Incompatible</text>
-          <text x="100" y="42" fill="#f0f2f8" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">Outdated server! (1.21.1)</text>
-          <text x="100" y="56" fill="#8c93a8" font-size="7.5" font-family="'Geist Mono', monospace" text-anchor="middle">Cliente ejecutaba versión 1.21.4</text>
+        <!-- Paso 2: Error -->
+        <g transform="translate(380, 215)">
+          <rect width="290" height="95" rx="10" fill="#2d1519" stroke="#f87171" stroke-width="2"/>
+          <text x="145" y="30" fill="#f87171" font-size="14" font-family="'Outfit', sans-serif" font-weight="800" text-anchor="middle">⚠️ Linux OOM Killer</text>
+          <text x="145" y="54" fill="#f8fafc" font-size="12" font-family="'JetBrains Mono', monospace" text-anchor="middle">Process killed: Out of Memory</text>
+          <text x="145" y="74" fill="#94a3b8" font-size="11.5" font-family="'JetBrains Mono', monospace" text-anchor="middle">JVM supera el 100% de memoria física</text>
         </g>
 
-        <!-- Flecha 5 -> 6 -->
-        <path d="M 480 285 H 530" fill="none" stroke="#8c93a8" stroke-width="1.5" marker-end="url(#arrow)"/>
+        <path d="M 670 262 H 735" fill="none" stroke="#4ade80" stroke-width="2.5" marker-end="url(#arr-green)"/>
 
-        <!-- Bloque 6: Solución ViaVersion + Update -->
-        <g transform="translate(540, 245)">
-          <rect width="280" height="80" rx="8" fill="#181b26" stroke="#eb6c36" stroke-width="1.5"/>
-          <text x="14" y="22" fill="#eb6c36" font-size="9" font-family="'Geist Mono', monospace" font-weight="700">✓ COMPATIBILIDAD MULTIVERSION</text>
-          <text x="14" y="40" fill="#f0f2f8" font-size="8" font-family="'Geist Mono', monospace">• Actualización a Purpur 1.21.4 (Java 21)</text>
-          <text x="14" y="54" fill="#f0f2f8" font-size="8" font-family="'Geist Mono', monospace">• Instalación Plugin ViaVersion (v5.11.0)</text>
-          <text x="14" y="68" fill="#8c93a8" font-size="7.5" font-family="'Geist Mono', monospace">Soporta clientes 1.20.x hasta 1.21.4+</text>
+        <!-- Paso 3: Solución -->
+        <g transform="translate(750, 215)">
+          <rect width="350" height="95" rx="10" fill="#11291d" stroke="#4ade80" stroke-width="2"/>
+          <text x="175" y="30" fill="#4ade80" font-size="14" font-family="'Outfit', sans-serif" font-weight="800" text-anchor="middle">✓ Solución: Swap + G1GC Tuning</text>
+          <text x="175" y="54" fill="#f8fafc" font-size="11.5" font-family="'JetBrains Mono', monospace" text-anchor="middle">2GB Swap (swappiness=10) + -Xms512M -Xmx850M</text>
+          <text x="175" y="74" fill="#4ade80" font-size="11.5" font-family="'JetBrains Mono', monospace" text-anchor="middle">Resultado: JVM Estable con 0 reinicios</text>
         </g>
 
+        <!-- ==================== FILA 3: CASO 3 - GESTIÓN SEGURA ZERO-TRUST ==================== -->
+        <text x="40" y="360" fill="#c084fc" font-size="13" font-family="'JetBrains Mono', monospace" font-weight="700">CASO 3: GESTIÓN DE SERVIDORES Y FUGA DE LLAVES CRIPTOGRÁFICAS</text>
 
-        <!-- ==================== FASE 3: RESULTADO FINAL OPERATIVO ==================== -->
+        <!-- Paso 1: Intento -->
+        <g transform="translate(40, 380)">
+          <rect width="260" height="95" rx="10" fill="#131826" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
+          <text x="130" y="30" fill="#f8fafc" font-size="14" font-family="'Outfit', sans-serif" font-weight="700" text-anchor="middle">1. Método Tradicional (SSH)</text>
+          <text x="130" y="54" fill="#94a3b8" font-size="12" font-family="'JetBrains Mono', monospace" text-anchor="middle">Puerto 22 Expuesto a Internet</text>
+          <text x="130" y="74" fill="#f87171" font-size="11.5" font-family="'JetBrains Mono', monospace" text-anchor="middle">Riesgo: Filtración de .pem en Git</text>
+        </g>
 
-        <!-- Flecha 6 -> Final -->
-        <path d="M 680 325 V 390 Q 680 400 670 400 H 450" fill="none" stroke="#4ade80" stroke-width="1.8" marker-end="url(#arrow-green)"/>
+        <path d="M 300 427 H 365" fill="none" stroke="#f87171" stroke-width="2.5" marker-end="url(#arr-red)"/>
 
-        <!-- Bloque 7: Éxito Final -->
-        <g transform="translate(180, 365)">
-          <rect width="260" height="70" rx="10" fill="#1b2a22" stroke="#4ade80" stroke-width="2"/>
-          <text x="130" y="28" fill="#4ade80" font-size="11" font-family="'Geist', sans-serif" font-weight="700" text-anchor="middle">🎉 SERVIDOR 100% OPERATIVO</text>
-          <text x="130" y="46" fill="#f0f2f8" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">54.81.175.12:25565</text>
-          <text x="130" y="58" fill="#8c93a8" font-size="7.5" font-family="'Geist Mono', monospace" text-anchor="middle">Conexión Fluida, Chunks Generados y Seguro</text>
+        <!-- Paso 2: Error -->
+        <g transform="translate(380, 380)">
+          <rect width="290" height="95" rx="10" fill="#2d1519" stroke="#f87171" stroke-width="2"/>
+          <text x="145" y="30" fill="#f87171" font-size="14" font-family="'Outfit', sans-serif" font-weight="800" text-anchor="middle">⚠️ Ataques de Fuerza Bruta</text>
+          <text x="145" y="54" fill="#f8fafc" font-size="12" font-family="'JetBrains Mono', monospace" text-anchor="middle">Escaneo de puertos constantes :22</text>
+          <text x="145" y="74" fill="#94a3b8" font-size="11.5" font-family="'JetBrains Mono', monospace" text-anchor="middle">Vulnerabilidad de acceso lateral</text>
+        </g>
+
+        <path d="M 670 427 H 735" fill="none" stroke="#4ade80" stroke-width="2.5" marker-end="url(#arr-green)"/>
+
+        <!-- Paso 3: Solución -->
+        <g transform="translate(750, 380)">
+          <rect width="350" height="95" rx="10" fill="#11291d" stroke="#4ade80" stroke-width="2"/>
+          <text x="175" y="30" fill="#4ade80" font-size="14" font-family="'Outfit', sans-serif" font-weight="800" text-anchor="middle">✓ Solución: AWS Systems Manager</text>
+          <text x="175" y="54" fill="#f8fafc" font-size="11.5" font-family="'JetBrains Mono', monospace" text-anchor="middle">Puerto 22 Cerrado (Zero-Trust SSM Agent)</text>
+          <text x="175" y="74" fill="#4ade80" font-size="11.5" font-family="'JetBrains Mono', monospace" text-anchor="middle">Resultado: Auditoría CloudTrail & Cero Llaves</text>
         </g>
 
       </svg>

@@ -3,24 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pipeline IaC Enterprise - CloudFormation vs Terraform</title>
+  <title>Pipeline IaC Enterprise - CloudFormation vs Terraform - Duoc UC</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600;700&family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --paper: #090b10;
-      --paper-card: #131722;
-      --ink: #f0f2f8;
-      --ink-muted: #8c93a8;
-      --accent: #eb6c36;
-      --accent-soft: rgba(235, 108, 54, 0.12);
+      --paper: #07090e;
+      --paper-card: #0f1422;
+      --ink: #f8fafc;
+      --ink-muted: #94a3b8;
+      --accent: #f97316;
+      --accent-soft: rgba(249, 115, 22, 0.15);
       --teal: #38bdf8;
-      --purple: #a855f7;
+      --purple: #c084fc;
       --green: #4ade80;
-      --border: rgba(240, 242, 248, 0.1);
-      --font-sans: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
-      --font-mono: 'Geist Mono', monospace;
+      --border: rgba(255, 255, 255, 0.12);
+      --font-sans: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -31,64 +31,85 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
       min-height: 100vh;
-      padding: 2rem;
+      padding: 2rem 1.5rem;
     }
 
     .diagram-card {
       background: var(--paper-card);
       border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 2rem;
-      max-width: 1050px;
+      border-radius: 20px;
+      padding: 2.5rem;
+      max-width: 1480px;
       width: 100%;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
     }
 
     .header {
-      margin-bottom: 1.5rem;
+      margin-bottom: 2rem;
       display: flex;
       justify-content: space-between;
-      align-items: flex-start;
+      align-items: center;
       border-bottom: 1px solid var(--border);
-      padding-bottom: 1rem;
+      padding-bottom: 1.5rem;
+      flex-wrap: wrap;
+      gap: 1rem;
     }
 
     .eyebrow {
       font-family: var(--font-mono);
-      font-size: 0.75rem;
+      font-size: 0.85rem;
+      font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.15em;
       color: var(--accent);
-      margin-bottom: 0.25rem;
+      margin-bottom: 0.4rem;
     }
 
     h1 {
-      font-size: 1.4rem;
-      font-weight: 600;
+      font-size: 1.8rem;
+      font-weight: 800;
       letter-spacing: -0.02em;
+    }
+
+    .meta-tags {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
     }
 
     .meta-tag {
       font-family: var(--font-mono);
-      font-size: 0.75rem;
-      background: rgba(168, 85, 247, 0.12);
-      color: var(--purple);
-      padding: 0.35rem 0.75rem;
-      border-radius: 999px;
-      border: 1px solid var(--purple);
+      font-size: 0.85rem;
+      font-weight: 600;
+      background: var(--accent-soft);
+      color: var(--accent);
+      padding: 0.45rem 1rem;
+      border-radius: 30px;
+      border: 1px solid var(--accent);
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .meta-tag:hover {
+      background: var(--accent);
+      color: #fff;
     }
 
     .svg-container {
       width: 100%;
       overflow-x: auto;
+      background: rgba(0, 0, 0, 0.25);
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 1rem;
     }
 
     svg {
       display: block;
       width: 100%;
       height: auto;
+      min-width: 1100px;
     }
   </style>
 </head>
@@ -98,92 +119,109 @@
     <div class="header">
       <div>
         <div class="eyebrow">DEVOPS & INFRAESTRUCTURA COMO CÓDIGO (IaC)</div>
-        <h1>Pipeline de Despliegue Automatizado Enterprise</h1>
+        <h1>Comparativa y Pipelines de Despliegue: CloudFormation vs Terraform</h1>
       </div>
-      <div style="display: flex; gap: 0.5rem;">
-        <a href="index.html" class="meta-tag" style="text-decoration: none; cursor: pointer;">← Galería</a>
+      <div class="meta-tags">
+        <a href="index.html" class="meta-tag">← Volver a la Galería</a>
         <span class="meta-tag">IaC Dual Completo</span>
       </div>
-
     </div>
 
     <div class="svg-container">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 500" width="980" height="500">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1140 560" width="1140" height="560">
         <defs>
-          <marker id="arrow-accent" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-            <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#eb6c36"/>
+          <marker id="arr-orange" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#f97316"/>
           </marker>
-          <marker id="arrow-purple" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-            <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#a855f7"/>
+          <marker id="arr-purple" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#c084fc"/>
           </marker>
         </defs>
 
-        <!-- RAMA 1: CLOUDFORMATION -->
-        <g transform="translate(30, 45)">
-          <rect width="210" height="80" rx="8" fill="#131722" stroke="#eb6c36" stroke-width="1.5"/>
-          <text x="16" y="24" fill="#eb6c36" font-size="9" font-family="'Geist Mono', monospace" font-weight="700">1. AWS CLOUDFORMATION</text>
-          <text x="16" y="44" fill="#f0f2f8" font-size="11" font-family="'Geist', sans-serif" font-weight="600">cd-cloud-native-duoc.yaml</text>
-          <text x="16" y="60" fill="#8c93a8" font-size="7.5" font-family="'Geist Mono', monospace">Stack Declarativo Todo-en-Uno</text>
+        <!-- ==================== RAMA 1: CLOUDFORMATION ==================== -->
+        <g transform="translate(40, 20)">
+          <rect width="1060" height="235" rx="12" fill="rgba(249, 115, 22, 0.03)" stroke="#f97316" stroke-width="2"/>
+          <text x="30" y="32" fill="#f97316" font-size="14" font-family="'JetBrains Mono', monospace" font-weight="800">OPCIÓN A: AWS CLOUDFORMATION (STACK NATIVO DECLARATIVO)</text>
+
+          <!-- Paso 1 -->
+          <g transform="translate(30, 50)">
+            <rect width="280" height="155" rx="10" fill="#181524" stroke="#f97316" stroke-width="1.5"/>
+            <text x="20" y="28" fill="#f97316" font-size="12" font-family="'JetBrains Mono', monospace" font-weight="700">1. PLANTILLA YAML</text>
+            <text x="20" y="52" fill="#f8fafc" font-size="14" font-family="'Outfit', sans-serif" font-weight="700">cd-cloud-native-duoc.yaml</text>
+            <text x="20" y="76" fill="#94a3b8" font-size="11.5" font-family="'JetBrains Mono', monospace">• Stack Monolítico de 700 líneas</text>
+            <text x="20" y="96" fill="#94a3b8" font-size="11.5" font-family="'JetBrains Mono', monospace">• Parámetros e IPs configurables</text>
+            <text x="20" y="116" fill="#94a3b8" font-size="11.5" font-family="'JetBrains Mono', monospace">• Mappings de AMIs por región</text>
+            <text x="20" y="136" fill="#4ade80" font-size="11" font-family="'JetBrains Mono', monospace">✓ Pseudo-parámetros AWS</text>
+          </g>
+
+          <path d="M 330 127 H 385" fill="none" stroke="#f97316" stroke-width="2.5" marker-end="url(#arr-orange)"/>
+
+          <!-- Paso 2 -->
+          <g transform="translate(400, 50)">
+            <rect width="290" height="155" rx="10" fill="#181524" stroke="#f97316" stroke-width="1.5"/>
+            <text x="20" y="28" fill="#f97316" font-size="12" font-family="'JetBrains Mono', monospace" font-weight="700">2. VALIDACIÓN DE SINTAXIS</text>
+            <text x="20" y="52" fill="#f8fafc" font-size="14" font-family="'Outfit', sans-serif" font-weight="700">AWS CLI Validation</text>
+            <text x="20" y="76" fill="#38bdf8" font-size="11.5" font-family="'JetBrains Mono', monospace">aws cloudformation</text>
+            <text x="20" y="96" fill="#38bdf8" font-size="11.5" font-family="'JetBrains Mono', monospace">validate-template</text>
+            <text x="20" y="122" fill="#4ade80" font-size="11.5" font-family="'JetBrains Mono', monospace">✓ Sin costos • Chequeo estático</text>
+          </g>
+
+          <path d="M 710 127 H 765" fill="none" stroke="#f97316" stroke-width="2.5" marker-end="url(#arr-orange)"/>
+
+          <!-- Paso 3 -->
+          <g transform="translate(780, 50)">
+            <rect width="250" height="155" rx="10" fill="#181524" stroke="#f97316" stroke-width="1.5"/>
+            <text x="20" y="28" fill="#f97316" font-size="12" font-family="'JetBrains Mono', monospace" font-weight="700">3. DESPLIEGUE ATÓMICO</text>
+            <text x="20" y="52" fill="#f8fafc" font-size="14" font-family="'Outfit', sans-serif" font-weight="700">Stack Execution</text>
+            <text x="20" y="76" fill="#38bdf8" font-size="11.5" font-family="'JetBrains Mono', monospace">aws cloudformation deploy</text>
+            <text x="20" y="96" fill="#94a3b8" font-size="11.5" font-family="'JetBrains Mono', monospace">• Auto-Rollback ante fallos</text>
+            <text x="20" y="116" fill="#94a3b8" font-size="11.5" font-family="'JetBrains Mono', monospace">• ChangeSets para auditoría</text>
+            <text x="20" y="136" fill="#4ade80" font-size="11" font-family="'JetBrains Mono', monospace">✓ Estado gestionado por AWS</text>
+          </g>
         </g>
 
-        <path d="M 240 85 H 305" fill="none" stroke="#eb6c36" stroke-width="1.5" marker-end="url(#arrow-accent)"/>
+        <!-- ==================== RAMA 2: TERRAFORM ==================== -->
+        <g transform="translate(40, 280)">
+          <rect width="1060" height="255" rx="12" fill="rgba(192, 132, 252, 0.03)" stroke="#c084fc" stroke-width="2"/>
+          <text x="30" y="32" fill="#c084fc" font-size="14" font-family="'JetBrains Mono', monospace" font-weight="800">OPCIÓN B: HASHICORP TERRAFORM (ARQUITECTURA MODULAR MULTI-NUBE)</text>
 
-        <g transform="translate(315, 45)">
-          <rect width="265" height="80" rx="8" fill="#181d2c" stroke="#eb6c36" stroke-width="1.5"/>
-          <text x="16" y="24" fill="#eb6c36" font-size="9" font-family="'Geist Mono', monospace" font-weight="700">2. VALIDACIÓN & DESPLIEGUE</text>
-          <text x="16" y="44" fill="#f0f2f8" font-size="8.5" font-family="'Geist Mono', monospace">aws cloudformation validate-template</text>
-          <text x="16" y="58" fill="#f0f2f8" font-size="8.5" font-family="'Geist Mono', monospace">aws cloudformation create-stack</text>
-        </g>
+          <!-- Paso 1 -->
+          <g transform="translate(30, 50)">
+            <rect width="280" height="175" rx="10" fill="#18142c" stroke="#c084fc" stroke-width="1.5"/>
+            <text x="20" y="28" fill="#c084fc" font-size="12" font-family="'JetBrains Mono', monospace" font-weight="700">1. ESTRUCTURA MODULAR</text>
+            <text x="20" y="52" fill="#f8fafc" font-size="14" font-family="'Outfit', sans-serif" font-weight="700">terraform/ (4 Módulos)</text>
+            <text x="20" y="76" fill="#94a3b8" font-size="11.5" font-family="'JetBrains Mono', monospace">• modules/networking/ (VPC)</text>
+            <text x="20" y="96" fill="#94a3b8" font-size="11.5" font-family="'JetBrains Mono', monospace">• modules/storage/ (Dynamo/S3)</text>
+            <text x="20" y="116" fill="#94a3b8" font-size="11.5" font-family="'JetBrains Mono', monospace">• modules/security/ (IAM/SG)</text>
+            <text x="20" y="136" fill="#94a3b8" font-size="11.5" font-family="'JetBrains Mono', monospace">• modules/compute/ (EC2)</text>
+            <text x="20" y="156" fill="#4ade80" font-size="11" font-family="'JetBrains Mono', monospace">✓ Variables e Outputs tipados</text>
+          </g>
 
-        <path d="M 580 85 H 645" fill="none" stroke="#eb6c36" stroke-width="1.5" marker-end="url(#arrow-accent)"/>
+          <path d="M 330 137 H 385" fill="none" stroke="#c084fc" stroke-width="2.5" marker-end="url(#arr-purple)"/>
 
+          <!-- Paso 2 -->
+          <g transform="translate(400, 50)">
+            <rect width="290" height="175" rx="10" fill="#18142c" stroke="#c084fc" stroke-width="1.5"/>
+            <text x="20" y="28" fill="#c084fc" font-size="12" font-family="'JetBrains Mono', monospace" font-weight="700">2. PLANIFICACIÓN & GRAFO</text>
+            <text x="20" y="52" fill="#f8fafc" font-size="14" font-family="'Outfit', sans-serif" font-weight="700">terraform plan</text>
+            <text x="20" y="76" fill="#38bdf8" font-size="11.5" font-family="'JetBrains Mono', monospace">terraform init</text>
+            <text x="20" y="96" fill="#38bdf8" font-size="11.5" font-family="'JetBrains Mono', monospace">terraform validate</text>
+            <text x="20" y="120" fill="#94a3b8" font-size="11.5" font-family="'JetBrains Mono', monospace">• Grafo de dependencias DAG</text>
+            <text x="20" y="140" fill="#4ade80" font-size="11.5" font-family="'JetBrains Mono', monospace">✓ Vista previa: +18 recursos</text>
+          </g>
 
-        <!-- RAMA 2: TERRAFORM -->
-        <g transform="translate(30, 195)">
-          <rect width="210" height="80" rx="8" fill="#131722" stroke="#a855f7" stroke-width="1.5"/>
-          <text x="16" y="24" fill="#a855f7" font-size="9" font-family="'Geist Mono', monospace" font-weight="700">1. HASHICORP TERRAFORM</text>
-          <text x="16" y="44" fill="#f0f2f8" font-size="11" font-family="'Geist', sans-serif" font-weight="600">terraform/ (4 Módulos)</text>
-          <text x="16" y="60" fill="#8c93a8" font-size="7.5" font-family="'Geist Mono', monospace">networking, storage, security, compute</text>
-        </g>
+          <path d="M 710 137 H 765" fill="none" stroke="#c084fc" stroke-width="2.5" marker-end="url(#arr-purple)"/>
 
-        <path d="M 240 235 H 305" fill="none" stroke="#a855f7" stroke-width="1.5" marker-end="url(#arrow-purple)"/>
-
-        <g transform="translate(315, 195)">
-          <rect width="265" height="80" rx="8" fill="#181d2c" stroke="#a855f7" stroke-width="1.5"/>
-          <text x="16" y="24" fill="#a855f7" font-size="9" font-family="'Geist Mono', monospace" font-weight="700">2. PLAN & APPLY MODULAR</text>
-          <text x="16" y="44" fill="#f0f2f8" font-size="8.5" font-family="'Geist Mono', monospace">terraform init (AWS Provider ~> 5.0)</text>
-          <text x="16" y="58" fill="#f0f2f8" font-size="8.5" font-family="'Geist Mono', monospace">terraform apply -auto-approve</text>
-        </g>
-
-        <path d="M 580 235 H 645" fill="none" stroke="#a855f7" stroke-width="1.5" marker-end="url(#arrow-purple)"/>
-
-
-        <!-- DESTINO: RECURSOS EMPRESARIALES CREADOS EN AWS -->
-        <g transform="translate(655, 40)">
-          <rect width="295" height="240" rx="10" fill="#15241e" stroke="#4ade80" stroke-width="2"/>
-          <rect x="0" y="0" width="295" height="30" rx="10" fill="rgba(74, 222, 128, 0.15)"/>
-          <text x="147" y="19" fill="#4ade80" font-size="10" font-family="'Geist Mono', monospace" font-weight="700" text-anchor="middle">RECURSOS APROVISIONADOS EN AWS</text>
-
-          <text x="16" y="50" fill="#f0f2f8" font-size="8.5" font-family="'Geist', sans-serif" font-weight="600">🌐 VPC (10.0.0.0/16) + 3 Subredes + NAT Instance</text>
-          <text x="16" y="68" fill="#a855f7" font-size="8.5" font-family="'Geist', sans-serif" font-weight="600">⚡ Tabla NoSQL DynamoDB (UsuariosMinecraft)</text>
-          <text x="16" y="86" fill="#38bdf8" font-size="8.5" font-family="'Geist', sans-serif" font-weight="600">🌐 Bucket S3 Frontend (Static Website Hosting)</text>
-          <text x="16" y="104" fill="#eb6c36" font-size="8.5" font-family="'Geist', sans-serif" font-weight="600">📦 Bucket S3 Backups Versionado (Enabled)</text>
-          <text x="16" y="122" fill="#f0f2f8" font-size="8.5" font-family="'Geist', sans-serif" font-weight="600">🎮 EC2 Minecraft Purpur 1.21.4 + ViaVersion</text>
-          <text x="16" y="140" fill="#4ade80" font-size="8.5" font-family="'Geist', sans-serif" font-weight="600">🐍 EC2 Backend Flask en Subred Privada + Docker</text>
-          <text x="16" y="158" fill="#38bdf8" font-size="8.5" font-family="'Geist', sans-serif" font-weight="600">📈 CloudWatch Agent + Alarma Auto-Healing</text>
-          <text x="16" y="176" fill="#f0f2f8" font-size="8.5" font-family="'Geist', sans-serif" font-weight="600">🔐 SSM Parameter Store (/minecraft/rcon_password)</text>
-          <text x="16" y="194" fill="#8c93a8" font-size="8" font-family="'Geist Mono', monospace">✓ IAM LabInstanceProfile • Sin Puertos SSH 22</text>
-          <text x="16" y="210" fill="#4ade80" font-size="8" font-family="'Geist Mono', monospace">✓ Despliegue 100% Autónomo y Reproducible</text>
-        </g>
-
-        <!-- BANNER DE BUENAS PRÁCTICAS -->
-        <g transform="translate(30, 310)">
-          <rect width="920" height="150" rx="10" fill="#121622" stroke="rgba(240,242,248,0.15)" stroke-width="1"/>
-          <text x="24" y="28" fill="#38bdf8" font-size="10" font-family="'Geist Mono', monospace" font-weight="700">💡 PILARES DE ARQUITECTURA CLOUD NATIVE APLICADOS</text>
-          <text x="24" y="52" fill="#f0f2f8" font-size="9" font-family="'Geist', sans-serif">• <strong>Seguridad en Profundidad:</strong> Backend aislado en subred privada sin IP pública, credenciales en SSM y tokens JWT.</text>
-          <text x="24" y="72" fill="#f0f2f8" font-size="9" font-family="'Geist', sans-serif">• <strong>Alta Disponibilidad y Respaldo:</strong> S3 con versionamiento para evitar pérdida del mundo y DynamoDB NoSQL.</text>
-          <text x="24" y="92" fill="#f0f2f8" font-size="9" font-family="'Geist', sans-serif">• <strong>Observabilidad Proactiva:</strong> Monitoreo de RAM y Swap con CloudWatch Agent y alarmas de sobrecarga.</text>
-          <text x="24" y="112" fill="#f0f2f8" font-size="9" font-family="'Geist', sans-serif">• <strong>Infraestructura como Código Modular:</strong> Módulos reutilizables validados con Terraform y CloudFormation.</text>
+          <!-- Paso 3 -->
+          <g transform="translate(780, 50)">
+            <rect width="250" height="175" rx="10" fill="#18142c" stroke="#c084fc" stroke-width="1.5"/>
+            <text x="20" y="28" fill="#c084fc" font-size="12" font-family="'JetBrains Mono', monospace" font-weight="700">3. APLICACIÓN & ESTADO</text>
+            <text x="20" y="52" fill="#f8fafc" font-size="14" font-family="'Outfit', sans-serif" font-weight="700">terraform apply</text>
+            <text x="20" y="76" fill="#38bdf8" font-size="11.5" font-family="'JetBrains Mono', monospace">terraform apply -auto-approve</text>
+            <text x="20" y="100" fill="#94a3b8" font-size="11.5" font-family="'JetBrains Mono', monospace">• Creación paralela</text>
+            <text x="20" y="120" fill="#94a3b8" font-size="11.5" font-family="'JetBrains Mono', monospace">• Control de State (.tfstate)</text>
+            <text x="20" y="140" fill="#4ade80" font-size="11.5" font-family="'JetBrains Mono', monospace">✓ Salidas de IPs y URLs</text>
+          </g>
         </g>
 
       </svg>

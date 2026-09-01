@@ -6,22 +6,22 @@
   <title>Pipeline CI/CD & Ecosistema de Servicios AWS - Duoc UC</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600;700&family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --paper: #090b10;
-      --paper-card: #131722;
-      --ink: #f0f2f8;
-      --ink-muted: #8c93a8;
-      --accent: #eb6c36;
-      --accent-soft: rgba(235, 108, 54, 0.12);
+      --paper: #07090e;
+      --paper-card: #0f1422;
+      --ink: #f8fafc;
+      --ink-muted: #94a3b8;
+      --accent: #f97316;
+      --accent-soft: rgba(249, 115, 22, 0.15);
       --teal: #38bdf8;
-      --purple: #a855f7;
+      --purple: #c084fc;
       --green: #4ade80;
       --yellow: #facc15;
-      --border: rgba(240, 242, 248, 0.1);
-      --font-sans: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
-      --font-mono: 'Geist Mono', monospace;
+      --border: rgba(255, 255, 255, 0.12);
+      --font-sans: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -32,69 +32,85 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
       min-height: 100vh;
-      padding: 2rem;
+      padding: 2rem 1.5rem;
     }
 
     .diagram-card {
       background: var(--paper-card);
       border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 2rem;
-      max-width: 1080px;
+      border-radius: 20px;
+      padding: 2.5rem;
+      max-width: 1480px;
       width: 100%;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
     }
 
     .header {
-      margin-bottom: 1.5rem;
+      margin-bottom: 2rem;
       display: flex;
       justify-content: space-between;
-      align-items: flex-start;
+      align-items: center;
       border-bottom: 1px solid var(--border);
-      padding-bottom: 1rem;
+      padding-bottom: 1.5rem;
+      flex-wrap: wrap;
+      gap: 1rem;
     }
 
     .eyebrow {
       font-family: var(--font-mono);
-      font-size: 0.75rem;
+      font-size: 0.85rem;
+      font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.15em;
       color: var(--accent);
-      margin-bottom: 0.25rem;
+      margin-bottom: 0.4rem;
     }
 
     h1 {
-      font-size: 1.4rem;
-      font-weight: 600;
+      font-size: 1.8rem;
+      font-weight: 800;
       letter-spacing: -0.02em;
     }
 
     .meta-tags {
       display: flex;
-      gap: 0.5rem;
+      align-items: center;
+      gap: 0.75rem;
     }
 
     .meta-tag {
       font-family: var(--font-mono);
-      font-size: 0.75rem;
-      background: rgba(56, 189, 248, 0.12);
-      color: var(--teal);
-      padding: 0.35rem 0.75rem;
-      border-radius: 999px;
-      border: 1px solid var(--teal);
+      font-size: 0.85rem;
+      font-weight: 600;
+      background: var(--accent-soft);
+      color: var(--accent);
+      padding: 0.45rem 1rem;
+      border-radius: 30px;
+      border: 1px solid var(--accent);
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .meta-tag:hover {
+      background: var(--accent);
+      color: #fff;
     }
 
     .svg-container {
       width: 100%;
       overflow-x: auto;
+      background: rgba(0, 0, 0, 0.25);
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 1rem;
     }
 
     svg {
       display: block;
       width: 100%;
       height: auto;
+      min-width: 1150px;
     }
   </style>
 </head>
@@ -104,136 +120,140 @@
     <div class="header">
       <div>
         <div class="eyebrow">DEVOPS & INTEGRACIÓN CONTINUA (CI/CD)</div>
-        <h1>Pipeline Automatizado & Ecosistema de Servicios AWS Sugeridos</h1>
+        <h1>Pipeline Automatizado de 2 Fases & Ecosistema de Servicios AWS</h1>
       </div>
       <div class="meta-tags">
-        <a href="index.html" class="meta-tag" style="text-decoration: none; cursor: pointer;">← Galería</a>
+        <a href="index.html" class="meta-tag">← Volver a la Galería</a>
         <span class="meta-tag">GitHub Actions + AWS</span>
       </div>
-
     </div>
 
     <div class="svg-container">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 530" width="1000" height="530">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1180 600" width="1180" height="600">
         <defs>
-          <marker id="arrow" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-            <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#8c93a8"/>
+          <marker id="arr-gray" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#94a3b8"/>
           </marker>
-          <marker id="arrow-teal" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <marker id="arr-teal" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
             <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#38bdf8"/>
           </marker>
-          <marker id="arrow-green" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <marker id="arr-green" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
             <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#4ade80"/>
           </marker>
         </defs>
 
         <!-- SECCIÓN 1: PIPELINE CI/CD (FLUJO HORIZONTAL) -->
-        <rect x="20" y="30" width="960" height="210" rx="10" fill="rgba(255,255,255,0.01)" stroke="rgba(240,242,248,0.12)"/>
-        <text x="40" y="52" fill="#38bdf8" font-size="9" font-family="'Geist Mono', monospace" font-weight="700">PIPELINE CI/CD: GITHUB ACTIONS ➔ AWS AUTOMATION</text>
+        <rect x="20" y="20" width="1140" height="270" rx="14" fill="rgba(255,255,255,0.015)" stroke="rgba(255,255,255,0.12)" stroke-width="2"/>
+        <text x="45" y="48" fill="#38bdf8" font-size="13" font-family="'JetBrains Mono', monospace" font-weight="700">PIPELINE CI/CD: GITHUB ACTIONS ➔ AWS AUTOMATION</text>
 
         <!-- Paso 1: Git Push -->
-        <g transform="translate(40, 70)">
-          <rect width="180" height="145" rx="8" fill="#181d2c" stroke="#eb6c36" stroke-width="1.5"/>
-          <text x="14" y="24" fill="#eb6c36" font-size="9" font-family="'Geist Mono', monospace" font-weight="700">1. DEVELOPER PUSH</text>
-          <text x="14" y="44" fill="#f0f2f8" font-size="11" font-family="'Geist', sans-serif" font-weight="600">Git Commit & Push</text>
-          <text x="14" y="60" fill="#8c93a8" font-size="7.5" font-family="'Geist Mono', monospace">Rama: main / PR</text>
-          <line x1="14" y1="70" x2="166" y2="70" stroke="rgba(240,242,248,0.1)"/>
-          <text x="14" y="88" fill="#f0f2f8" font-size="7.5" font-family="'Geist Mono', monospace">• Cambios en app.py</text>
-          <text x="14" y="102" fill="#f0f2f8" font-size="7.5" font-family="'Geist Mono', monospace">• Cambios en static/</text>
-          <text x="14" y="116" fill="#f0f2f8" font-size="7.5" font-family="'Geist Mono', monospace">• Cambios en IaC (TF/CFn)</text>
+        <g transform="translate(45, 65)">
+          <rect width="230" height="200" rx="10" fill="#181a28" stroke="#f97316" stroke-width="1.8"/>
+          <text x="20" y="30" fill="#f97316" font-size="12" font-family="'JetBrains Mono', monospace" font-weight="700">1. DEVELOPER PUSH</text>
+          <text x="20" y="56" fill="#f8fafc" font-size="14" font-family="'Outfit', sans-serif" font-weight="700">Git Commit & Push</text>
+          <text x="20" y="78" fill="#94a3b8" font-size="11.5" font-family="'JetBrains Mono', monospace">Rama: main / PR</text>
+          <line x1="20" y1="90" x2="210" y2="90" stroke="rgba(255,255,255,0.1)"/>
+          <text x="20" y="114" fill="#f8fafc" font-size="11.5" font-family="'JetBrains Mono', monospace">• Cambios en app.py</text>
+          <text x="20" y="136" fill="#f8fafc" font-size="11.5" font-family="'JetBrains Mono', monospace">• Cambios en frontend/</text>
+          <text x="20" y="158" fill="#f8fafc" font-size="11.5" font-family="'JetBrains Mono', monospace">• Modificaciones IaC</text>
+          <text x="20" y="184" fill="#38bdf8" font-size="11" font-family="'JetBrains Mono', monospace">Trigger: push | dispatch</text>
         </g>
 
-        <!-- Flecha 1 -> 2 -->
-        <path d="M 220 142 H 275" fill="none" stroke="#8c93a8" stroke-width="1.5" marker-end="url(#arrow)"/>
+        <path d="M 285 165 H 325" fill="none" stroke="#38bdf8" stroke-width="2.5" marker-end="url(#arr-teal)"/>
 
-        <!-- Paso 2: Fase CI -->
-        <g transform="translate(285, 70)">
-          <rect width="210" height="145" rx="8" fill="#181d2c" stroke="#38bdf8" stroke-width="1.5"/>
-          <text x="14" y="24" fill="#38bdf8" font-size="9" font-family="'Geist Mono', monospace" font-weight="700">2. FASE CI (INTEGRACIÓN)</text>
-          <text x="14" y="44" fill="#f0f2f8" font-size="11" font-family="'Geist', sans-serif" font-weight="600">Test & Validación</text>
-          <line x1="14" y1="56" x2="196" y2="56" stroke="rgba(240,242,248,0.1)"/>
-          <text x="14" y="74" fill="#4ade80" font-size="7.5" font-family="'Geist Mono', monospace">✓ Syntax Check (Python 3.11)</text>
-          <text x="14" y="90" fill="#4ade80" font-size="7.5" font-family="'Geist Mono', monospace">✓ terraform validate</text>
-          <text x="14" y="106" fill="#4ade80" font-size="7.5" font-family="'Geist Mono', monospace">✓ cfn-lint / validate-template</text>
-          <text x="14" y="122" fill="#4ade80" font-size="7.5" font-family="'Geist Mono', monospace">✓ Docker Build Test</text>
+        <!-- Paso 2: Fase 1 CI -->
+        <g transform="translate(335, 65)">
+          <rect width="250" height="200" rx="10" fill="#131e30" stroke="#38bdf8" stroke-width="1.8"/>
+          <text x="20" y="30" fill="#38bdf8" font-size="12" font-family="'JetBrains Mono', monospace" font-weight="700">2. FASE 1: CI (VALIDACIÓN)</text>
+          <text x="20" y="56" fill="#f8fafc" font-size="14" font-family="'Outfit', sans-serif" font-weight="700">Validación Estática</text>
+          <text x="20" y="78" fill="#94a3b8" font-size="11.5" font-family="'JetBrains Mono', monospace">Runner: ubuntu-latest</text>
+          <line x1="20" y1="90" x2="230" y2="90" stroke="rgba(255,255,255,0.1)"/>
+          <text x="20" y="114" fill="#4ade80" font-size="11.5" font-family="'JetBrains Mono', monospace">✓ Python 3.11 Syntax Test</text>
+          <text x="20" y="136" fill="#4ade80" font-size="11.5" font-family="'JetBrains Mono', monospace">✓ terraform validate</text>
+          <text x="20" y="158" fill="#4ade80" font-size="11.5" font-family="'JetBrains Mono', monospace">✓ cfn validate-template</text>
+          <text x="20" y="184" fill="#38bdf8" font-size="11" font-family="'JetBrains Mono', monospace">Resultado: PASS (30s)</text>
         </g>
 
-        <!-- Flecha 2 -> 3 -->
-        <path d="M 495 142 H 550" fill="none" stroke="#38bdf8" stroke-width="1.5" marker-end="url(#arrow-teal)"/>
+        <path d="M 595 165 H 635" fill="none" stroke="#38bdf8" stroke-width="2.5" marker-end="url(#arr-teal)"/>
 
-        <!-- Paso 3: Fase CD (Frontend) -->
-        <g transform="translate(560, 70)">
-          <rect width="190" height="145" rx="8" fill="#181d2c" stroke="#a855f7" stroke-width="1.5"/>
-          <text x="14" y="24" fill="#a855f7" font-size="9" font-family="'Geist Mono', monospace" font-weight="700">3. DESPLIEGUE S3 (CD)</text>
-          <text x="14" y="44" fill="#f0f2f8" font-size="11" font-family="'Geist', sans-serif" font-weight="600">Sync Frontend</text>
-          <line x1="14" y1="56" x2="176" y2="56" stroke="rgba(240,242,248,0.1)"/>
-          <text x="14" y="74" fill="#f0f2f8" font-size="7.5" font-family="'Geist Mono', monospace">• aws s3 sync static/ s3://</text>
-          <text x="14" y="90" fill="#f0f2f8" font-size="7.5" font-family="'Geist Mono', monospace">• Invalidation CloudFront</text>
-          <text x="14" y="106" fill="#4ade80" font-size="7.5" font-family="'Geist Mono', monospace">✓ Web Actualizada en Vivo</text>
-          <text x="14" y="122" fill="#8c93a8" font-size="7.5" font-family="'Geist Mono', monospace">Latencia &lt; 50ms</text>
+        <!-- Paso 3: Fase 2 CD -->
+        <g transform="translate(645, 65)">
+          <rect width="260" height="200" rx="10" fill="#132420" stroke="#4ade80" stroke-width="1.8"/>
+          <text x="20" y="30" fill="#4ade80" font-size="12" font-family="'JetBrains Mono', monospace" font-weight="700">3. FASE 2: CD (DESPLIEGUE)</text>
+          <text x="20" y="56" fill="#f8fafc" font-size="14" font-family="'Outfit', sans-serif" font-weight="700">Despliegue a AWS</text>
+          <text x="20" y="78" fill="#94a3b8" font-size="11.5" font-family="'JetBrains Mono', monospace">Auth: AWS Secrets Token</text>
+          <line x1="20" y1="90" x2="240" y2="90" stroke="rgba(255,255,255,0.1)"/>
+          <text x="20" y="114" fill="#4ade80" font-size="11.5" font-family="'JetBrains Mono', monospace">✓ Auto-Detect IP de EC2</text>
+          <text x="20" y="136" fill="#4ade80" font-size="11.5" font-family="'JetBrains Mono', monospace">✓ Inyección IP en app.js</text>
+          <text x="20" y="158" fill="#4ade80" font-size="11.5" font-family="'JetBrains Mono', monospace">✓ Sync a S3 Website</text>
+          <text x="20" y="184" fill="#4ade80" font-size="11" font-family="'JetBrains Mono', monospace">✓ SSM Restart Flask/Purpur</text>
         </g>
 
-        <!-- Flecha 3 -> 4 -->
-        <path d="M 750 142 H 800" fill="none" stroke="#4ade80" stroke-width="1.5" marker-end="url(#arrow-green)"/>
+        <path d="M 915 165 H 955" fill="none" stroke="#4ade80" stroke-width="2.5" marker-end="url(#arr-green)"/>
 
-        <!-- Paso 4: Fase CD (Backend EC2) -->
-        <g transform="translate(810, 70)">
-          <rect width="150" height="145" rx="8" fill="#18231c" stroke="#4ade80" stroke-width="1.5"/>
-          <text x="12" y="24" fill="#4ade80" font-size="9" font-family="'Geist Mono', monospace" font-weight="700">4. REINICIO EC2</text>
-          <text x="12" y="44" fill="#f0f2f8" font-size="11" font-family="'Geist', sans-serif" font-weight="600">AWS SSM Dispatch</text>
-          <line x1="12" y1="56" x2="138" y2="56" stroke="rgba(240,242,248,0.1)"/>
-          <text x="12" y="74" fill="#f0f2f8" font-size="7.5" font-family="'Geist Mono', monospace">• SSM Send-Command</text>
-          <text x="12" y="90" fill="#f0f2f8" font-size="7.5" font-family="'Geist Mono', monospace">• docker compose up</text>
-          <text x="12" y="106" fill="#4ade80" font-size="7.5" font-family="'Geist Mono', monospace">✓ Sin SSH 22 Abierto</text>
-          <text x="12" y="122" fill="#8c93a8" font-size="7.5" font-family="'Geist Mono', monospace">Zero Downtime</text>
+        <!-- Paso 4: Producción -->
+        <g transform="translate(965, 65)">
+          <rect width="175" height="200" rx="10" fill="#1f1830" stroke="#c084fc" stroke-width="1.8"/>
+          <text x="15" y="30" fill="#c084fc" font-size="12" font-family="'JetBrains Mono', monospace" font-weight="700">4. EN VIVO</text>
+          <text x="15" y="56" fill="#f8fafc" font-size="14" font-family="'Outfit', sans-serif" font-weight="700">Producción</text>
+          <text x="15" y="78" fill="#94a3b8" font-size="11" font-family="'JetBrains Mono', monospace">AWS us-east-1</text>
+          <line x1="15" y1="90" x2="160" y2="90" stroke="rgba(255,255,255,0.1)"/>
+          <text x="15" y="114" fill="#38bdf8" font-size="11" font-family="'JetBrains Mono', monospace">• S3 Website</text>
+          <text x="15" y="136" fill="#4ade80" font-size="11" font-family="'JetBrains Mono', monospace">• Minecraft Live</text>
+          <text x="15" y="158" fill="#c084fc" font-size="11" font-family="'JetBrains Mono', monospace">• DynamoDB NoSQL</text>
+          <text x="15" y="184" fill="#facc15" font-size="10.5" font-family="'JetBrains Mono', monospace">Job Summary 📄</text>
         </g>
 
+        <!-- SECCIÓN 2: ECOSISTEMA DE SERVICIOS AWS IMPLEMENTADOS Y SUGERIDOS -->
+        <rect x="20" y="310" width="1140" height="265" rx="14" fill="rgba(255,255,255,0.015)" stroke="rgba(255,255,255,0.12)" stroke-width="2"/>
+        <text x="45" y="340" fill="#facc15" font-size="13" font-family="'JetBrains Mono', monospace" font-weight="700">ECOSISTEMA DE SERVICIOS AWS • CLOUD NATIVE ENTERPRISE</text>
 
-        <!-- SECCIÓN 2: OTROS SERVICIOS DE AWS RECOMENDADOS -->
-        <g transform="translate(20, 265)">
-          <rect width="960" height="235" rx="10" fill="#131722" stroke="rgba(240,242,248,0.15)"/>
-          <text x="24" y="26" fill="#facc15" font-size="10" font-family="'Geist Mono', monospace" font-weight="700">🚀 ECOSISTEMA DE SERVICIOS AWS RECOMENDADOS PARA MAXIMIZAR EL PROYECTO</text>
+        <!-- Bloque 1: Cómputo y Red -->
+        <g transform="translate(45, 360)">
+          <rect width="255" height="195" rx="10" fill="#151a26" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
+          <text x="20" y="30" fill="#f97316" font-size="12" font-family="'JetBrains Mono', monospace" font-weight="700">CÓMPUTO & REDES</text>
+          <text x="20" y="54" fill="#f8fafc" font-size="14" font-family="'Outfit', sans-serif" font-weight="700">Core IaaS</text>
+          <text x="20" y="80" fill="#f8fafc" font-size="11.5" font-family="'JetBrains Mono', monospace">• Amazon VPC (10.0.0.0/16)</text>
+          <text x="20" y="102" fill="#f8fafc" font-size="11.5" font-family="'JetBrains Mono', monospace">• Subnets Públicas y Privadas</text>
+          <text x="20" y="124" fill="#f8fafc" font-size="11.5" font-family="'JetBrains Mono', monospace">• Amazon EC2 (NAT & Backend)</text>
+          <text x="20" y="146" fill="#f8fafc" font-size="11.5" font-family="'JetBrains Mono', monospace">• Internet Gateway</text>
+          <text x="20" y="172" fill="#4ade80" font-size="11" font-family="'JetBrains Mono', monospace">✓ Implementado en Stack</text>
+        </g>
 
-          <!-- Tarjeta 1: CloudFront -->
-          <g transform="translate(24, 45)">
-            <rect width="215" height="165" rx="8" fill="#181d2c" stroke="#38bdf8" stroke-width="1.2"/>
-            <text x="14" y="22" fill="#38bdf8" font-size="9.5" font-family="'Geist Mono', monospace" font-weight="700">1. AMAZON CLOUDFRONT</text>
-            <text x="14" y="40" fill="#f0f2f8" font-size="10" font-family="'Geist', sans-serif" font-weight="600">CDN Global & HTTPS</text>
-            <text x="14" y="58" fill="#8c93a8" font-size="7.5" font-family="'Geist Mono', monospace">Puntos de presencia globales (Santiago) para cargar el frontend en milisegundos con SSL gratuito (ACM).</text>
-            <rect x="14" y="125" width="187" height="24" rx="4" fill="rgba(56, 189, 248, 0.1)"/>
-            <text x="107" y="141" fill="#38bdf8" font-size="7.5" font-family="'Geist Mono', monospace" text-anchor="middle">Beneficio: Ultra Baja Latencia</text>
-          </g>
+        <!-- Bloque 2: Datos y Storage -->
+        <g transform="translate(320, 360)">
+          <rect width="255" height="195" rx="10" fill="#18152c" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
+          <text x="20" y="30" fill="#c084fc" font-size="12" font-family="'JetBrains Mono', monospace" font-weight="700">DATOS & STORAGE</text>
+          <text x="20" y="54" fill="#f8fafc" font-size="14" font-family="'Outfit', sans-serif" font-weight="700">Serverless Data</text>
+          <text x="20" y="80" fill="#f8fafc" font-size="11.5" font-family="'JetBrains Mono', monospace">• Amazon DynamoDB NoSQL</text>
+          <text x="20" y="102" fill="#f8fafc" font-size="11.5" font-family="'JetBrains Mono', monospace">• Amazon S3 Website Hosting</text>
+          <text x="20" y="124" fill="#f8fafc" font-size="11.5" font-family="'JetBrains Mono', monospace">• Amazon S3 Versionado (DR)</text>
+          <text x="20" y="146" fill="#f8fafc" font-size="11.5" font-family="'JetBrains Mono', monospace">• EBS Volumes con Swap</text>
+          <text x="20" y="172" fill="#4ade80" font-size="11" font-family="'JetBrains Mono', monospace">✓ Implementado en Stack</text>
+        </g>
 
-          <!-- Tarjeta 2: ECR -->
-          <g transform="translate(260, 45)">
-            <rect width="215" height="165" rx="8" fill="#181d2c" stroke="#a855f7" stroke-width="1.2"/>
-            <text x="14" y="22" fill="#a855f7" font-size="9.5" font-family="'Geist Mono', monospace" font-weight="700">2. AMAZON ECR</text>
-            <text x="14" y="40" fill="#f0f2f8" font-size="10" font-family="'Geist', sans-serif" font-weight="600">Elastic Container Registry</text>
-            <text x="14" y="58" fill="#8c93a8" font-size="7.5" font-family="'Geist Mono', monospace">Registro privado de Docker seguro con escaneo automático de vulnerabilidades y versionamiento de tags.</text>
-            <rect x="14" y="125" width="187" height="24" rx="4" fill="rgba(168, 85, 247, 0.1)"/>
-            <text x="107" y="141" fill="#a855f7" font-size="7.5" font-family="'Geist Mono', monospace" text-anchor="middle">Beneficio: Seguridad en Imágenes</text>
-          </g>
+        <!-- Bloque 3: Seguridad y Gestión -->
+        <g transform="translate(595, 360)">
+          <rect width="255" height="195" rx="10" fill="#132030" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
+          <text x="20" y="30" fill="#38bdf8" font-size="12" font-family="'JetBrains Mono', monospace" font-weight="700">SEGURIDAD & CONTROL</text>
+          <text x="20" y="54" fill="#f8fafc" font-size="14" font-family="'Outfit', sans-serif" font-weight="700">Zero-Trust Cloud</text>
+          <text x="20" y="80" fill="#f8fafc" font-size="11.5" font-family="'JetBrains Mono', monospace">• AWS SSM Session Manager</text>
+          <text x="20" y="102" fill="#f8fafc" font-size="11.5" font-family="'JetBrains Mono', monospace">• SSM Parameter Store</text>
+          <text x="20" y="124" fill="#f8fafc" font-size="11.5" font-family="'JetBrains Mono', monospace">• Security Groups State-Aware</text>
+          <text x="20" y="146" fill="#f8fafc" font-size="11.5" font-family="'JetBrains Mono', monospace">• IAM Roles (LabRole)</text>
+          <text x="20" y="172" fill="#4ade80" font-size="11" font-family="'JetBrains Mono', monospace">✓ Implementado en Stack</text>
+        </g>
 
-          <!-- Tarjeta 3: Lambda + EventBridge -->
-          <g transform="translate(496, 45)">
-            <rect width="215" height="165" rx="8" fill="#181d2c" stroke="#4ade80" stroke-width="1.2"/>
-            <text x="14" y="22" fill="#4ade80" font-size="9.5" font-family="'Geist Mono', monospace" font-weight="700">3. LAMBDA + EVENTBRIDGE</text>
-            <text x="14" y="40" fill="#f0f2f8" font-size="10" font-family="'Geist', sans-serif" font-weight="600">Auto-Encendido y Apagado</text>
-            <text x="14" y="58" fill="#8c93a8" font-size="7.5" font-family="'Geist Mono', monospace">Apaga la EC2 de noche (02:00 AM) y enciéndela de día (08:00 AM) automáticamente para ahorrar créditos.</text>
-            <rect x="14" y="125" width="187" height="24" rx="4" fill="rgba(74, 222, 128, 0.1)"/>
-            <text x="107" y="141" fill="#4ade80" font-size="7.5" font-family="'Geist Mono', monospace" text-anchor="middle">Beneficio: Ahorro 70% Créditos</text>
-          </g>
-
-          <!-- Tarjeta 4: SNS + Discord -->
-          <g transform="translate(732, 45)">
-            <rect width="204" height="165" rx="8" fill="#181d2c" stroke="#eb6c36" stroke-width="1.2"/>
-            <text x="14" y="22" fill="#eb6c36" font-size="9.5" font-family="'Geist Mono', monospace" font-weight="700">4. AMAZON SNS & BOT</text>
-            <text x="14" y="40" fill="#f0f2f8" font-size="10" font-family="'Geist', sans-serif" font-weight="600">Notificaciones en Tiempo Real</text>
-            <text x="14" y="58" fill="#8c93a8" font-size="7.5" font-family="'Geist Mono', monospace">Envía alertas a tu celular o a un canal de Discord cuando un jugador se registra o ante fallos del servidor.</text>
-            <rect x="14" y="125" width="176" height="24" rx="4" fill="rgba(235, 108, 54, 0.1)"/>
-            <text x="102" y="141" fill="#eb6c36" font-size="7.5" font-family="'Geist Mono', monospace" text-anchor="middle">Beneficio: Alertas Inmediatas</text>
-          </g>
-
+        <!-- Bloque 4: Escalabilidad Futura -->
+        <g transform="translate(870, 360)">
+          <rect width="270" height="195" rx="10" fill="#241e16" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
+          <text x="20" y="30" fill="#facc15" font-size="12" font-family="'JetBrains Mono', monospace" font-weight="700">SERVICIOS SUGERIDOS</text>
+          <text x="20" y="54" fill="#f8fafc" font-size="14" font-family="'Outfit', sans-serif" font-weight="700">Arquitectura Futura</text>
+          <text x="20" y="80" fill="#f8fafc" font-size="11.5" font-family="'JetBrains Mono', monospace">• Amazon CloudFront CDN</text>
+          <text x="20" y="102" fill="#f8fafc" font-size="11.5" font-family="'JetBrains Mono', monospace">• AWS WAF (Anti-DDoS)</text>
+          <text x="20" y="124" fill="#f8fafc" font-size="11.5" font-family="'JetBrains Mono', monospace">• AWS Lambda Serverless</text>
+          <text x="20" y="146" fill="#f8fafc" font-size="11.5" font-family="'JetBrains Mono', monospace">• Amazon Route 53 (DNS)</text>
+          <text x="20" y="172" fill="#38bdf8" font-size="11" font-family="'JetBrains Mono', monospace">💡 Fase 2 Enterprise</text>
         </g>
 
       </svg>

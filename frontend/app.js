@@ -256,6 +256,16 @@ function renderizarJugadores(jugadores) {
     jugadores.forEach((u) => {
         const gamertag = u.gamertag || u.nombre || "Steve";
         const skinUrl = `https://mc-heads.net/avatar/${encodeURIComponent(gamertag)}/56`;
+        
+        let fechaFormateada = "Reciente";
+        if (u.fecha_registro) {
+            try {
+                const d = new Date(u.fecha_registro);
+                fechaFormateada = d.toLocaleDateString("es-CL", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" });
+            } catch {
+                fechaFormateada = u.fecha_registro;
+            }
+        }
 
         const card = document.createElement("div");
         card.className = "player-card";
@@ -266,7 +276,10 @@ function renderizarJugadores(jugadores) {
             <div class="player-details">
                 <div class="player-name">${u.nombre}</div>
                 <div class="player-email">${u.email}</div>
-                <span class="player-gamertag-pill">🎮 ${gamertag}</span>
+                <div style="display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap; margin-top: 0.25rem;">
+                    <span class="player-gamertag-pill">🎮 ${gamertag}</span>
+                    <span style="font-size: 0.72rem; color: #38bdf8; background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.25); padding: 0.1rem 0.45rem; border-radius: 4px;">📅 ${fechaFormateada}</span>
+                </div>
             </div>
             <div class="player-actions">
                 <button class="btn-icon" title="Copiar Gamertag" onclick="copiarGamertag('${gamertag}')">📋</button>
@@ -276,6 +289,7 @@ function renderizarJugadores(jugadores) {
         gridJugadores.appendChild(card);
     });
 }
+
 
 function copiarGamertag(gamertag) {
     navigator.clipboard.writeText(gamertag);

@@ -2,7 +2,8 @@
 // CONFIGURACIÓN GLOBAL
 // ============================================
 // IP Pública de AWS NAT Instance / Minecraft Server
-const API_BASE_URL = "http://18.215.185.57:8081";
+const API_BASE_URL = "http://3.231.202.80:8081";
+
 
 
 let authToken = sessionStorage.getItem("admin_token") || null;

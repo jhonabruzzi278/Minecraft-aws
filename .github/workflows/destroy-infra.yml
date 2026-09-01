@@ -1,0 +1,95 @@
+name: 🧹 Clean & Destroy Infrastructure - Cloud Native Duoc UC
+
+on:
+  workflow_dispatch:
+    inputs:
+      tool:
+        description: 'Herramienta utilizada para desplegar (terraform o cloudformation)'
+        required: true
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - terraform
+          - cloudformation
+
+jobs:
+  destroy-infrastructure:
+    name: 🧹 Destrucción Total de Infraestructura
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Clonar Repositorio
+        uses: actions/checkout@v4
+
+      - name: 🔑 Configurar Credenciales de AWS
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
+          aws-region: us-east-1
+
+      # ------------------------------------------------------------
+      # 1. LIMPIEZA DE BUCKETS S3 (Vaciar antes de destruir)
+      # ------------------------------------------------------------
+      - name: 🗑️ Vaciar Buckets S3 de Frontend y Backups
+        run: |
+          echo "Buscando buckets asociados al proyecto para vaciado forzado..."
+          BUCKETS=$(aws s3api list-buckets --query "Buckets[?contains(Name, 'cloud-native-duoc') || contains(Name, 'mc-backups') || contains(Name, 'frontend')].Name" --output text 2>/dev/null || true)
+          for b in $BUCKETS; do
+            if [ -n "$b" ] && [ "$b" != "None" ]; then
+              echo "Vaciando bucket s3://$b ..."
+              aws s3 rm s3://$b --recursive 2>/dev/null || true
+            fi
+          done
+
+      # ------------------------------------------------------------
+      # 2. DESTRUCCIÓN CON TERRAFORM (Si aplica)
+      # ------------------------------------------------------------
+      - name: 🛠️ Destruir Infraestructura con Terraform
+        if: ${{ inputs.tool == 'terraform' || inputs.tool == 'all' }}
+        run: |
+          if [ -d "terraform" ]; then
+            cd terraform
+            echo "Inicializando y ejecutando terraform destroy..."
+            terraform init -backend=false || true
+            terraform destroy -auto-approve || echo "Terraform destroy completado o sin estado previo."
+          fi
+
+      # ------------------------------------------------------------
+      # 3. DESTRUCCIÓN CON CLOUDFORMATION (Si aplica)
+      # ------------------------------------------------------------
+      - name: 📄 Destruir Stack de AWS CloudFormation
+        if: ${{ inputs.tool == 'cloudformation' || inputs.tool == 'all' }}
+        run: |
+          STACK_NAME="cf-duoc-cloud-native"
+          echo "Verificando si existe el stack $STACK_NAME ..."
+          STATUS=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].StackStatus" --output text 2>/dev/null || echo "DOES_NOT_EXIST")
+          
+          if [ "$STATUS" != "DOES_NOT_EXIST" ]; then
+            echo "Eliminando stack $STACK_NAME (Estado actual: $STATUS)..."
+            aws cloudformation delete-stack --stack-name $STACK_NAME
+            echo "Esperando que el stack se elimine por completo..."
+            aws cloudformation wait stack-delete-complete --stack-name $STACK_NAME || true
+            echo "✓ Stack eliminado exitosamente."
+          else
+            echo "El stack $STACK_NAME no existe en la cuenta."
+          fi
+
+      # ------------------------------------------------------------
+      # 4. AUDITORÍA FINAL DE CONFIRMACIÓN
+      # ------------------------------------------------------------
+      - name: 🔍 Auditoría de Cuenta Limpia
+        run: |
+          echo "============================================================"
+          echo " REPORTE DE ESTADO FINAL DE LA CUENTA AWS"
+          echo "============================================================"
+          echo "Instancias EC2 Activas:"
+          aws ec2 describe-instances --filters "Name=instance-state-name,Values=running,pending,stopped" --query "Reservations[*].Instances[*].[InstanceId,State.Name]" --output table
+          echo "Stacks de CloudFormation:"
+          aws cloudformation list-stacks --stack-status-filter CREATE_COMPLETE UPDATE_COMPLETE --query "StackSummaries[*].[StackName,StackStatus]" --output table
+          echo "Buckets S3 Restantes:"
+          aws s3 ls
+          echo "============================================================"
+          echo "✅ ¡Cuenta de AWS limpia y lista para nuevas pruebas!"

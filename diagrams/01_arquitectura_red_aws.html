@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arquitectura Cloud Native Enterprise - Duoc UC</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600;700&family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --paper: #090b10;
+      --paper-card: #131722;
+      --ink: #f0f2f8;
+      --ink-muted: #8c93a8;
+      --accent: #eb6c36;
+      --accent-soft: rgba(235, 108, 54, 0.12);
+      --teal: #38bdf8;
+      --purple: #a855f7;
+      --green: #4ade80;
+      --border: rgba(240, 242, 248, 0.1);
+      --font-sans: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'Geist Mono', monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--paper);
+      color: var(--ink);
+      font-family: var(--font-sans);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 2rem;
+    }
+
+    .diagram-card {
+      background: var(--paper-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem;
+      max-width: 1120px;
+      width: 100%;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    .header {
+      margin-bottom: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 1rem;
+    }
+
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--accent);
+      margin-bottom: 0.25rem;
+    }
+
+    h1 {
+      font-size: 1.4rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+
+    .meta-tags {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .meta-tag {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      background: var(--accent-soft);
+      color: var(--accent);
+      padding: 0.35rem 0.75rem;
+      border-radius: 999px;
+      border: 1px solid var(--accent);
+    }
+
+    .meta-tag-purple {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      background: rgba(168, 85, 247, 0.12);
+      color: var(--purple);
+      padding: 0.35rem 0.75rem;
+      border-radius: 999px;
+      border: 1px solid var(--purple);
+    }
+
+    .svg-container {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    svg {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .footer {
+      margin-top: 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      font-size: 0.8rem;
+      color: var(--ink-muted);
+      font-family: var(--font-mono);
+      border-top: 1px solid var(--border);
+      padding-top: 1rem;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .legend-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="diagram-card">
+    <div class="header">
+      <div>
+        <div class="eyebrow">DUOC UC • CLOUD NATIVE ENTERPRISE ARCHITECTURE</div>
+        <h1>Topología Completa: VPC, DynamoDB, S3 Versionado, Docker & RCON</h1>
+      </div>
+      <div class="meta-tags">
+        <span class="meta-tag">3-Tier + Serverless</span>
+        <span class="meta-tag-purple">Enterprise Suite</span>
+      </div>
+    </div>
+
+    <div class="svg-container">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1020 580" width="1020" height="580">
+        <defs>
+          <marker id="arrow-gray" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#8c93a8"/>
+          </marker>
+          <marker id="arrow-accent" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#eb6c36"/>
+          </marker>
+          <marker id="arrow-teal" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#38bdf8"/>
+          </marker>
+          <marker id="arrow-purple" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#a855f7"/>
+          </marker>
+          <marker id="arrow-green" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#4ade80"/>
+          </marker>
+        </defs>
+
+        <!-- ZONA: INTERNET / CLIENTES -->
+        <rect x="20" y="40" width="150" height="500" rx="12" fill="rgba(255,255,255,0.01)" stroke="rgba(240,242,248,0.12)" stroke-dasharray="4,4"/>
+        <rect x="36" y="32" width="118" height="16" rx="3" fill="#090b10"/>
+        <text x="95" y="44" fill="#8c93a8" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">CLIENTES EXTERNOS</text>
+
+        <!-- ZONA: AWS VPC -->
+        <rect x="195" y="40" width="580" height="500" rx="12" fill="rgba(255,255,255,0.01)" stroke="rgba(240,242,248,0.15)"/>
+        <rect x="215" y="32" width="220" height="16" rx="3" fill="#090b10"/>
+        <text x="325" y="44" fill="#eb6c36" font-size="9" font-family="'Geist Mono', monospace" font-weight="600" text-anchor="middle">AWS VPC: 10.0.0.0/16</text>
+
+        <!-- Subred Pública -->
+        <rect x="210" y="70" width="265" height="450" rx="8" fill="rgba(56, 189, 248, 0.02)" stroke="rgba(56, 189, 248, 0.25)"/>
+        <text x="342" y="90" fill="#38bdf8" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">SUBRED PÚBLICA (10.0.1.0/24)</text>
+
+        <!-- Subred Privada 1 (Backend) -->
+        <rect x="495" y="70" width="265" height="450" rx="8" fill="rgba(74, 222, 128, 0.02)" stroke="rgba(74, 222, 128, 0.2)" stroke-dasharray="4,3"/>
+        <text x="627" y="90" fill="#4ade80" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">SUBRED PRIVADA 1 (10.0.2.0/24)</text>
+
+        <!-- ZONA: SERVICIOS SERVERLESS AWS -->
+        <rect x="795" y="40" width="205" height="500" rx="12" fill="rgba(168, 85, 247, 0.03)" stroke="rgba(168, 85, 247, 0.25)"/>
+        <rect x="815" y="32" width="165" height="16" rx="3" fill="#090b10"/>
+        <text x="897" y="44" fill="#a855f7" font-size="8.5" font-family="'Geist Mono', monospace" font-weight="600" text-anchor="middle">AWS SERVERLESS SERVICES</text>
+
+
+        <!-- ==================== CONECTORES ==================== -->
+        <!-- Jugadores ➔ Minecraft 25565 -->
+        <path d="M 140 140 H 225" fill="none" stroke="#eb6c36" stroke-width="1.8" marker-end="url(#arrow-accent)"/>
+        <text x="180" y="132" fill="#eb6c36" font-size="7.5" font-family="'Geist Mono', monospace" text-anchor="middle">TCP 25565</text>
+
+        <!-- Usuarios Web ➔ S3 Frontend -->
+        <path d="M 140 260 H 170 Q 180 260 180 280 V 525 Q 180 545 200 545 H 850 Q 860 545 860 510 V 170" fill="none" stroke="#38bdf8" stroke-width="1.6" marker-end="url(#arrow-teal)"/>
+        <text x="165" y="380" fill="#38bdf8" font-size="7.5" font-family="'Geist Mono', monospace" text-anchor="middle">HTTP S3</text>
+
+        <!-- Web App ➔ Backend Flask (8081) -->
+        <path d="M 140 380 H 510" fill="none" stroke="#38bdf8" stroke-width="1.6" marker-end="url(#arrow-teal)"/>
+        <text x="350" y="372" fill="#38bdf8" font-size="7.5" font-family="'Geist Mono', monospace" text-anchor="middle">REST API + JWT Bearer (:8081)</text>
+
+        <!-- Backend Privado ➔ Minecraft RCON (25575) -->
+        <path d="M 510 200 H 450" fill="none" stroke="#4ade80" stroke-width="1.8" marker-end="url(#arrow-green)"/>
+        <text x="480" y="192" fill="#4ade80" font-size="7.5" font-family="'Geist Mono', monospace" text-anchor="middle">RCON :25575</text>
+
+        <!-- Backend Privado ➔ DynamoDB -->
+        <path d="M 740 240 H 815" fill="none" stroke="#a855f7" stroke-width="1.8" marker-end="url(#arrow-purple)"/>
+        <text x="777" y="232" fill="#a855f7" font-size="7.5" font-family="'Geist Mono', monospace" text-anchor="middle">boto3 NoSQL</text>
+
+        <!-- Servidor Minecraft ➔ S3 Backups (Cron) -->
+        <path d="M 345 365 V 450 Q 345 460 355 460 H 815" fill="none" stroke="#eb6c36" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arrow-accent)"/>
+        <text x="580" y="452" fill="#eb6c36" font-size="7.5" font-family="'Geist Mono', monospace" text-anchor="middle">cron 6h tar.gz ➔ S3 Versionado</text>
+
+
+        <!-- ==================== NODOS ==================== -->
+        <!-- Nodo: Jugador -->
+        <g transform="translate(30, 105)">
+          <rect width="130" height="70" rx="8" fill="#131722" stroke="#eb6c36" stroke-width="1.5"/>
+          <text x="65" y="26" fill="#eb6c36" font-size="10" font-family="'Geist', sans-serif" font-weight="600" text-anchor="middle">Jugadores</text>
+          <text x="65" y="42" fill="#f0f2f8" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">Minecraft 1.20 - 1.21.4</text>
+          <text x="65" y="56" fill="#8c93a8" font-size="7.5" font-family="'Geist Mono', monospace" text-anchor="middle">ViaVersion Multiversión</text>
+        </g>
+
+        <!-- Nodo: Admin Dashboard -->
+        <g transform="translate(30, 345)">
+          <rect width="130" height="75" rx="8" fill="#131722" stroke="#38bdf8" stroke-width="1.5"/>
+          <text x="65" y="24" fill="#38bdf8" font-size="10" font-family="'Geist', sans-serif" font-weight="600" text-anchor="middle">Admin Dashboard</text>
+          <text x="65" y="40" fill="#f0f2f8" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">Consola RCON Web</text>
+          <text x="65" y="54" fill="#a855f7" font-size="7.5" font-family="'Geist Mono', monospace" text-anchor="middle">Auth JWT (/login)</text>
+          <text x="65" y="66" fill="#8c93a8" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle">Botones de Acción Rápida</text>
+        </g>
+
+        <!-- Nodo: EC2 NAT + Minecraft -->
+        <g transform="translate(225, 110)">
+          <rect width="235" height="255" rx="10" fill="#1c202e" stroke="#eb6c36" stroke-width="2"/>
+          <rect x="0" y="0" width="235" height="28" rx="10" fill="rgba(235, 108, 54, 0.15)"/>
+          <text x="117" y="18" fill="#eb6c36" font-size="9.5" font-family="'Geist Mono', monospace" font-weight="700" text-anchor="middle">EC2: NAT + MINECRAFT</text>
+          
+          <text x="14" y="46" fill="#f0f2f8" font-size="8.5" font-family="'Geist', sans-serif" font-weight="600">IP: 54.81.175.12 (:25565)</text>
+          <text x="14" y="60" fill="#8c93a8" font-size="7.5" font-family="'Geist Mono', monospace">Purpur 1.21.4 • Java 21 LTS</text>
+          
+          <line x1="14" y1="68" x2="221" y2="68" stroke="rgba(240,242,248,0.1)"/>
+          <text x="14" y="86" fill="#38bdf8" font-size="8" font-family="'Geist Mono', monospace">Servicios y Resiliencia:</text>
+          <text x="20" y="102" fill="#f0f2f8" font-size="7.5" font-family="'Geist Mono', monospace">• Servidor RCON (:25575)</text>
+          <text x="20" y="116" fill="#f0f2f8" font-size="7.5" font-family="'Geist Mono', monospace">• iptables NAT MASQUERADE</text>
+          <text x="20" y="130" fill="#f0f2f8" font-size="7.5" font-family="'Geist Mono', monospace">• Swap Memory 2GB + G1GC</text>
+          <text x="20" y="144" fill="#f0f2f8" font-size="7.5" font-family="'Geist Mono', monospace">• CloudWatch Agent (RAM/Swap)</text>
+          <text x="20" y="158" fill="#f0f2f8" font-size="7.5" font-family="'Geist Mono', monospace">• Cron Backup cada 6 Horas</text>
+          
+          <line x1="14" y1="170" x2="221" y2="170" stroke="rgba(240,242,248,0.1)"/>
+          <text x="117" y="190" fill="#4ade80" font-size="7.5" font-family="'Geist Mono', monospace" text-anchor="middle">✓ Alarma CloudWatch Auto-Healing</text>
+          <text x="117" y="204" fill="#8c93a8" font-size="7.5" font-family="'Geist Mono', monospace" text-anchor="middle">SSM Parameter Store Hardening</text>
+        </g>
+
+        <!-- Nodo: EC2 Backend Flask (Subred Privada) -->
+        <g transform="translate(510, 110)">
+          <rect width="235" height="255" rx="10" fill="#18231c" stroke="#4ade80" stroke-width="2"/>
+          <rect x="0" y="0" width="235" height="28" rx="10" fill="rgba(74, 222, 128, 0.15)"/>
+          <text x="117" y="18" fill="#4ade80" font-size="9.5" font-family="'Geist Mono', monospace" font-weight="700" text-anchor="middle">EC2: BACKEND FLASK (PRIVADA)</text>
+          
+          <text x="14" y="46" fill="#f0f2f8" font-size="8.5" font-family="'Geist', sans-serif" font-weight="600">Subred: 10.0.2.0/24 (:8081)</text>
+          <text x="14" y="60" fill="#8c93a8" font-size="7.5" font-family="'Geist Mono', monospace">Sin IP Pública (Aislado de Internet)</text>
+          
+          <line x1="14" y1="68" x2="221" y2="68" stroke="rgba(240,242,248,0.1)"/>
+          <text x="14" y="86" fill="#38bdf8" font-size="8" font-family="'Geist Mono', monospace">Componentes:</text>
+          <text x="20" y="102" fill="#f0f2f8" font-size="7.5" font-family="'Geist Mono', monospace">• Docker & Gunicorn Production</text>
+          <text x="20" y="116" fill="#f0f2f8" font-size="7.5" font-family="'Geist Mono', monospace">• Driver DynamoDB (boto3)</text>
+          <text x="20" y="130" fill="#f0f2f8" font-size="7.5" font-family="'Geist Mono', monospace">• Fallback SQLite (usuarios.db)</text>
+          <text x="20" y="144" fill="#f0f2f8" font-size="7.5" font-family="'Geist Mono', monospace">• Autenticación JWT (/api/auth)</text>
+          <text x="20" y="158" fill="#f0f2f8" font-size="7.5" font-family="'Geist Mono', monospace">• Consola RCON Endpoints</text>
+          
+          <line x1="14" y1="170" x2="221" y2="170" stroke="rgba(240,242,248,0.1)"/>
+          <text x="117" y="190" fill="#4ade80" font-size="7.5" font-family="'Geist Mono', monospace" text-anchor="middle">✓ Salida a Internet via NAT</text>
+        </g>
+
+        <!-- Nodo: S3 Frontend Website -->
+        <g transform="translate(815, 80)">
+          <rect width="170" height="75" rx="8" fill="#191c28" stroke="#38bdf8" stroke-width="1.5"/>
+          <text x="85" y="24" fill="#38bdf8" font-size="9" font-family="'Geist Mono', monospace" font-weight="600" text-anchor="middle">S3 WEBSITE HOSTING</text>
+          <text x="85" y="42" fill="#f0f2f8" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">frontend-website-bucket</text>
+          <text x="85" y="56" fill="#8c93a8" font-size="7.5" font-family="'Geist Mono', monospace" text-anchor="middle">HTML5 / CSS3 / JS / Glassmorphism</text>
+        </g>
+
+        <!-- Nodo: DynamoDB -->
+        <g transform="translate(815, 190)">
+          <rect width="170" height="85" rx="8" fill="#201a2c" stroke="#a855f7" stroke-width="2"/>
+          <text x="85" y="24" fill="#a855f7" font-size="9.5" font-family="'Geist Mono', monospace" font-weight="700" text-anchor="middle">AMAZON DYNAMODB</text>
+          <text x="85" y="44" fill="#f0f2f8" font-size="8.5" font-family="'Geist Mono', monospace" text-anchor="middle">Tabla: UsuariosMinecraft</text>
+          <text x="85" y="58" fill="#8c93a8" font-size="7.5" font-family="'Geist Mono', monospace" text-anchor="middle">PK: email (NoSQL Serverless)</text>
+          <text x="85" y="70" fill="#4ade80" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle">PAY_PER_REQUEST</text>
+        </g>
+
+        <!-- Nodo: S3 Backups Versionado -->
+        <g transform="translate(815, 310)">
+          <rect width="170" height="80" rx="8" fill="#191c28" stroke="#eb6c36" stroke-width="1.5"/>
+          <text x="85" y="24" fill="#eb6c36" font-size="9" font-family="'Geist Mono', monospace" font-weight="600" text-anchor="middle">S3 BACKUPS VERSIONADO</text>
+          <text x="85" y="42" fill="#f0f2f8" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">minecraft-backups-bucket</text>
+          <text x="85" y="56" fill="#8c93a8" font-size="7.5" font-family="'Geist Mono', monospace" text-anchor="middle">Versioning: Enabled (DR)</text>
+        </g>
+
+        <!-- Nodo: CloudWatch & SSM -->
+        <g transform="translate(815, 425)">
+          <rect width="170" height="90" rx="8" fill="#191c28" stroke="rgba(240,242,248,0.2)" stroke-width="1.2"/>
+          <text x="85" y="22" fill="#f0f2f8" font-size="9" font-family="'Geist Mono', monospace" font-weight="600" text-anchor="middle">CLOUDWATCH & SSM</text>
+          <text x="85" y="40" fill="#38bdf8" font-size="7.5" font-family="'Geist Mono', monospace" text-anchor="middle">• Alarma CPU & Auto-Healing</text>
+          <text x="85" y="54" fill="#4ade80" font-size="7.5" font-family="'Geist Mono', monospace" text-anchor="middle">• SSM /minecraft/rcon_password</text>
+          <text x="85" y="68" fill="#8c93a8" font-size="7.5" font-family="'Geist Mono', monospace" text-anchor="middle">• AWS Systems Manager Core</text>
+        </g>
+
+      </svg>
+    </div>
+
+    <div class="footer">
+      <div class="legend-item">
+        <div class="legend-dot" style="background: #eb6c36;"></div>
+        <span>Tráfico de Juego Minecraft & Backups S3</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot" style="background: #38bdf8;"></div>
+        <span>Peticiones Web Dashboard & REST API</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot" style="background: #a855f7;"></div>
+        <span>Base de Datos NoSQL DynamoDB</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot" style="background: #4ade80;"></div>
+        <span>Protocolo RCON Whitelist & Consola Admin</span>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

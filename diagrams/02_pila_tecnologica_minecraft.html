@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pila Tecnológica Cloud Native Enterprise - Duoc UC</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600;700&family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --paper: #090b10;
+      --paper-card: #131722;
+      --ink: #f0f2f8;
+      --ink-muted: #8c93a8;
+      --accent: #eb6c36;
+      --accent-soft: rgba(235, 108, 54, 0.12);
+      --teal: #38bdf8;
+      --purple: #a855f7;
+      --green: #4ade80;
+      --border: rgba(240, 242, 248, 0.1);
+      --font-sans: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'Geist Mono', monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--paper);
+      color: var(--ink);
+      font-family: var(--font-sans);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 2rem;
+    }
+
+    .diagram-card {
+      background: var(--paper-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem;
+      max-width: 980px;
+      width: 100%;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    .header {
+      margin-bottom: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 1rem;
+    }
+
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--accent);
+      margin-bottom: 0.25rem;
+    }
+
+    h1 {
+      font-size: 1.4rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+
+    .meta-tags {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .meta-tag {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      background: var(--accent-soft);
+      color: var(--accent);
+      padding: 0.35rem 0.75rem;
+      border-radius: 999px;
+      border: 1px solid var(--accent);
+    }
+
+    .meta-tag-purple {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      background: rgba(168, 85, 247, 0.12);
+      color: var(--purple);
+      padding: 0.35rem 0.75rem;
+      border-radius: 999px;
+      border: 1px solid var(--purple);
+    }
+
+    .svg-container {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    svg {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="diagram-card">
+    <div class="header">
+      <div>
+        <div class="eyebrow">ARQUITECTURA DE SOFTWARE • LAYER STACK</div>
+        <h1>Pila Tecnológica Cloud Native Enterprise de 6 Capas</h1>
+      </div>
+      <div class="meta-tags">
+        <span class="meta-tag">Docker & DynamoDB</span>
+        <span class="meta-tag-purple">Serverless + EC2</span>
+      </div>
+    </div>
+
+    <div class="svg-container">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="900" height="560">
+        
+        <!-- Capa 6: Frontend & Consola RCON -->
+        <g transform="translate(30, 15)">
+          <rect width="840" height="72" rx="8" fill="#181c28" stroke="#38bdf8" stroke-width="1.5"/>
+          <text x="24" y="24" fill="#38bdf8" font-size="9" font-family="'Geist Mono', monospace" font-weight="600">CAPA 6: PRESENTACIÓN, WEB S3 & CONSOLA RCON</text>
+          <text x="24" y="44" fill="#f0f2f8" font-size="12" font-family="'Geist', sans-serif" font-weight="600">Hosting S3 Website • Consola RCON Interactiva • Auth JWT • Dashboard Glassmorphism</text>
+          <text x="24" y="60" fill="#8c93a8" font-size="7.5" font-family="'Geist Mono', monospace">Terminal retro con botones rápidos (/time, /weather, /tps, /gamemode) y clientes Minecraft Java</text>
+          <rect x="700" y="18" width="120" height="24" rx="4" fill="rgba(56, 189, 248, 0.12)" stroke="#38bdf8" stroke-width="1"/>
+          <text x="760" y="34" fill="#38bdf8" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">S3 Web + Desktop</text>
+        </g>
+
+        <!-- Capa 5: Lógica de Negocio & Persistencia DynamoDB -->
+        <g transform="translate(30, 97)">
+          <rect width="840" height="75" rx="8" fill="#1b1d2e" stroke="#a855f7" stroke-width="1.8"/>
+          <text x="24" y="24" fill="#a855f7" font-size="9" font-family="'Geist Mono', monospace" font-weight="700">CAPA 5: API REST & PERSISTENCIA NoSQL (SUBRED PRIVADA 1)</text>
+          <text x="24" y="46" fill="#f0f2f8" font-size="12" font-family="'Geist', sans-serif" font-weight="600">Flask Enterprise API • Amazon DynamoDB (boto3) • Fallback SQLite • PyJWT Security</text>
+          <text x="24" y="62" fill="#8c93a8" font-size="7.5" font-family="'Geist Mono', monospace">CRUD completo, auto-whitelist RCON en vivo y endpoints de administración protegidos con tokens</text>
+          <rect x="700" y="22" width="120" height="24" rx="4" fill="rgba(168, 85, 247, 0.15)" stroke="#a855f7" stroke-width="1"/>
+          <text x="760" y="38" fill="#a855f7" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">DynamoDB + JWT</text>
+        </g>
+
+        <!-- Capa 4: Contenerización & Runtimes -->
+        <g transform="translate(30, 182)">
+          <rect width="840" height="72" rx="8" fill="#152422" stroke="#4ade80" stroke-width="1.5"/>
+          <text x="24" y="24" fill="#4ade80" font-size="9" font-family="'Geist Mono', monospace" font-weight="600">CAPA 4: CONTENERIZACIÓN & SERVIDORES DE APLICACIÓN</text>
+          <text x="24" y="44" fill="#f0f2f8" font-size="12" font-family="'Geist', sans-serif" font-weight="600">Docker & Docker-Compose • Gunicorn WSGI Production Server • Python 3.11</text>
+          <text x="24" y="60" fill="#8c93a8" font-size="7.5" font-family="'Geist Mono', monospace">Contenedor optimizado multi-etapa con reinicio automático y aislamiento de procesos</text>
+          <rect x="700" y="18" width="120" height="24" rx="4" fill="rgba(74, 222, 128, 0.12)" stroke="#4ade80" stroke-width="1"/>
+          <text x="760" y="34" fill="#4ade80" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">Docker + Gunicorn</text>
+        </g>
+
+        <!-- Capa 3: Motor de Juegos & Backups S3 -->
+        <g transform="translate(30, 264)">
+          <rect width="840" height="75" rx="8" fill="#252433" stroke="#eb6c36" stroke-width="2"/>
+          <text x="24" y="24" fill="#eb6c36" font-size="9" font-family="'Geist Mono', monospace" font-weight="700">CAPA 3: MOTOR DE JUEGOS & DISASTER RECOVERY (SUBRED PÚBLICA)</text>
+          <text x="24" y="46" fill="#f0f2f8" font-size="12.5" font-family="'Geist', sans-serif" font-weight="700">PurpurMC 1.21.4 • ViaVersion v5.11.0 • Servidor RCON (:25575) • Backup Cron a S3</text>
+          <text x="24" y="62" fill="#8c93a8" font-size="7.5" font-family="'Geist Mono', monospace">Corretto Java 21 LTS + G1GC Flags • S3 Bucket Versionado para respaldo del mundo cada 6 horas</text>
+          <rect x="700" y="22" width="120" height="24" rx="4" fill="rgba(235, 108, 54, 0.2)" stroke="#eb6c36" stroke-width="1"/>
+          <text x="760" y="38" fill="#eb6c36" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">Purpur + S3 Backup</text>
+        </g>
+
+        <!-- Capa 2: Sistema Operativo, Observabilidad & Hardening -->
+        <g transform="translate(30, 349)">
+          <rect width="840" height="72" rx="8" fill="#131722" stroke="rgba(240,242,248,0.2)" stroke-width="1.2"/>
+          <text x="24" y="24" fill="#38bdf8" font-size="9" font-family="'Geist Mono', monospace" font-weight="600">CAPA 2: OBSERVABILIDAD, SEGURIDAD & FIREWALL DE RED</text>
+          <text x="24" y="44" fill="#f0f2f8" font-size="12" font-family="'Geist', sans-serif" font-weight="600">Amazon Linux 2023 • CloudWatch Agent (RAM/Swap/Disco) • SSM Parameter Store</text>
+          <text x="24" y="60" fill="#8c93a8" font-size="7.5" font-family="'Geist Mono', monospace">iptables MASQUERADE (NAT) • Alarma CloudWatch Auto-Healing • Swap 2GB</text>
+          <rect x="700" y="18" width="120" height="24" rx="4" fill="rgba(255,255,255,0.05)" stroke="rgba(240,242,248,0.15)" stroke-width="1"/>
+          <text x="760" y="34" fill="#8c93a8" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">AL2023 + CloudWatch</text>
+        </g>
+
+        <!-- Capa 1: Infraestructura Cloud e IaC Dual -->
+        <g transform="translate(30, 431)">
+          <rect width="840" height="85" rx="8" fill="#131722" stroke="rgba(240,242,248,0.3)" stroke-width="1.2"/>
+          <text x="24" y="24" fill="#8c93a8" font-size="9" font-family="'Geist Mono', monospace" font-weight="600">CAPA 1: INFRAESTRUCTURA COMO CÓDIGO (IaC) & AWS CLOUD</text>
+          <text x="24" y="46" fill="#f0f2f8" font-size="12" font-family="'Geist', sans-serif" font-weight="600">CloudFormation (YAML) & Terraform Modular (HCL) • VPC 10.0.0.0/16 • 3 Subredes</text>
+          <text x="24" y="62" fill="#8c93a8" font-size="7.5" font-family="'Geist Mono', monospace">2x EC2 t3.micro • LabInstanceProfile • DynamoDB Table • 2x Buckets S3 (Website + Backups)</text>
+          <rect x="700" y="26" width="120" height="24" rx="4" fill="rgba(235, 108, 54, 0.15)" stroke="#eb6c36" stroke-width="1"/>
+          <text x="760" y="42" fill="#eb6c36" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">CFn + Terraform</text>
+        </g>
+
+      </svg>
+    </div>
+  </div>
+
+</body>
+</html>

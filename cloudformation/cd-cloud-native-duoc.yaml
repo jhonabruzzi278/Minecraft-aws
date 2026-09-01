@@ -1,0 +1,690 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: >
+  Infraestructura Completa Enterprise Cloud Native Duoc UC:
+  VPC 10.0.0.0/16, Subred Pública con NAT Instance y Servidor Minecraft (Purpur 1.21.4 + ViaVersion),
+  Subred Privada con Backend Flask (DynamoDB / SQLite, JWT, RCON),
+  Amazon DynamoDB Table para Jugadores, Buckets S3 (Website Frontend y Backups Versionados),
+  SSM Parameter Store para Hardening de Contraseñas y CloudWatch Alarms para Auto-Healing.
+
+Parameters:
+  Environment:
+    Type: String
+    Default: lab
+    AllowedValues: [lab, dev, staging, prod]
+    Description: Nombre del entorno
+
+  ProjectName:
+    Type: String
+    Default: cloud-native-duoc
+    Description: Nombre del proyecto para etiquetado
+
+  OwnerName:
+    Type: String
+    Default: Jonathan
+    Description: Nombre del propietario / alumno para tags
+
+  VpcCidr:
+    Type: String
+    Default: '10.0.0.0/16'
+    Description: Rango CIDR principal de la VPC
+    AllowedPattern: '^([0-9]{1,3}\.){3}[0-9]{1,3}/[0-9]{1,2}$'
+
+  PublicSubnetCidr:
+    Type: String
+    Default: '10.0.1.0/24'
+    Description: Rango CIDR de la Subred Publica
+    AllowedPattern: '^([0-9]{1,3}\.){3}[0-9]{1,3}/[0-9]{1,2}$'
+
+  PrivateSubnet1Cidr:
+    Type: String
+    Default: '10.0.2.0/24'
+    Description: Rango CIDR de la Subred Privada 1 (Backend App)
+    AllowedPattern: '^([0-9]{1,3}\.){3}[0-9]{1,3}/[0-9]{1,2}$'
+
+  PrivateSubnet2Cidr:
+    Type: String
+    Default: '10.0.3.0/24'
+    Description: Rango CIDR de la Subred Privada 2 (Base de Datos)
+    AllowedPattern: '^([0-9]{1,3}\.){3}[0-9]{1,3}/[0-9]{1,2}$'
+
+  InstanceType:
+    Type: String
+    Default: t3.micro
+    AllowedValues: [t3.nano, t3.micro, t3.small, t2.micro]
+    Description: Tipo de instancia EC2 para servidores
+
+  InstanceProfileName:
+    Type: String
+    Default: LabInstanceProfile
+    Description: IAM Instance Profile preexistente de AWS Academy
+
+  RconPassword:
+    Type: String
+    Default: 'DuocCloudNative2026!'
+    NoEcho: true
+    Description: Contraseña segura para el protocolo RCON de Minecraft
+
+Resources:
+  # ============================================================
+  # 1. VPC E INTERNET GATEWAY
+  # ============================================================
+  Vpc:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: !Ref VpcCidr
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+        - Key: Name
+          Value: !Sub ${Environment}-${ProjectName}-vpc
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Owner
+          Value: !Ref OwnerName
+        - Key: Project
+          Value: !Ref ProjectName
+
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: !Sub ${Environment}-${ProjectName}-igw
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Owner
+          Value: !Ref OwnerName
+
+  VpcGatewayAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref Vpc
+      InternetGatewayId: !Ref InternetGateway
+
+  # ============================================================
+  # 2. SUBREDES
+  # ============================================================
+  PublicSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref Vpc
+      CidrBlock: !Ref PublicSubnetCidr
+      AvailabilityZone: !Select [0, !GetAZs '']
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: !Sub ${Environment}-${ProjectName}-public-subnet
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Type
+          Value: Public
+
+  PrivateSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref Vpc
+      CidrBlock: !Ref PrivateSubnet1Cidr
+      AvailabilityZone: !Select [0, !GetAZs '']
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: !Sub ${Environment}-${ProjectName}-private-subnet-1
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Type
+          Value: Private
+
+  PrivateSubnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref Vpc
+      CidrBlock: !Ref PrivateSubnet2Cidr
+      AvailabilityZone: !Select [1, !GetAZs '']
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: !Sub ${Environment}-${ProjectName}-private-subnet-2
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Type
+          Value: Private
+
+  # ============================================================
+  # 3. TABLAS DE RUTEO Y ASOCIACIONES
+  # ============================================================
+  PublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref Vpc
+      Tags:
+        - Key: Name
+          Value: !Sub ${Environment}-${ProjectName}-public-rtb
+
+  PublicRouteIgw:
+    Type: AWS::EC2::Route
+    DependsOn: VpcGatewayAttachment
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref InternetGateway
+
+  PublicSubnetRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PublicSubnet
+      RouteTableId: !Ref PublicRouteTable
+
+  PrivateRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref Vpc
+      Tags:
+        - Key: Name
+          Value: !Sub ${Environment}-${ProjectName}-private-rtb
+
+  PrivateSubnet1RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PrivateSubnet1
+      RouteTableId: !Ref PrivateRouteTable
+
+  PrivateSubnet2RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PrivateSubnet2
+      RouteTableId: !Ref PrivateRouteTable
+
+  # ============================================================
+  # 4. STORAGE: DYNAMODB Y BUCKETS S3
+  # ============================================================
+  DynamoDBUsuarios:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: UsuariosMinecraft
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: email
+          AttributeType: S
+      KeySchema:
+        - AttributeName: email
+          KeyType: HASH
+      Tags:
+        - Key: Name
+          Value: !Sub ${Environment}-${ProjectName}-dynamodb-usuarios
+
+  FrontendWebsiteBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      WebsiteConfiguration:
+        IndexDocument: index.html
+        ErrorDocument: index.html
+      Tags:
+        - Key: Name
+          Value: !Sub ${Environment}-${ProjectName}-frontend-website
+
+  MinecraftBackupsBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      VersioningConfiguration:
+        Status: Enabled
+      Tags:
+        - Key: Name
+          Value: !Sub ${Environment}-${ProjectName}-minecraft-backups
+
+  # ============================================================
+  # 5. HARDENING: SSM PARAMETER STORE
+  # ============================================================
+  RconPasswordParameter:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: /minecraft/rcon_password
+      Type: String
+      Value: !Ref RconPassword
+      Description: Contraseña RCON de Minecraft gestionada por SSM Parameter Store
+
+  # ============================================================
+  # 6. SECURITY GROUPS
+  # ============================================================
+  NatMinecraftSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security Group para NAT Instance y Servidor Minecraft
+      VpcId: !Ref Vpc
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 25565
+          ToPort: 25565
+          CidrIp: 0.0.0.0/0
+          Description: Puerto de juego Minecraft TCP
+        - IpProtocol: udp
+          FromPort: 25565
+          ToPort: 25565
+          CidrIp: 0.0.0.0/0
+          Description: Puerto de juego Minecraft UDP
+        - IpProtocol: tcp
+          FromPort: 25575
+          ToPort: 25575
+          CidrIp: !Ref PrivateSubnet1Cidr
+          Description: RCON Management desde Backend Privado
+        - IpProtocol: '-1'
+          CidrIp: !Ref VpcCidr
+          Description: Permitir trafico interno de la VPC
+      SecurityGroupEgress:
+        - IpProtocol: '-1'
+          CidrIp: 0.0.0.0/0
+          Description: Salida completa a Internet
+      Tags:
+        - Key: Name
+          Value: !Sub ${Environment}-${ProjectName}-nat-mc-sg
+
+  BackendSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security Group para Backend Flask en Subred Privada
+      VpcId: !Ref Vpc
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 8081
+          ToPort: 8081
+          CidrIp: !Ref VpcCidr
+          Description: API Flask desde la VPC
+      SecurityGroupEgress:
+        - IpProtocol: '-1'
+          CidrIp: 0.0.0.0/0
+          Description: Salida a Internet via NAT
+      Tags:
+        - Key: Name
+          Value: !Sub ${Environment}-${ProjectName}-backend-sg
+
+  # ============================================================
+  # 7. NAT INSTANCE + SERVIDOR MINECRAFT (Subred Pública)
+  # ============================================================
+  NatInstance:
+    Type: AWS::EC2::Instance
+    DependsOn: PublicRouteIgw
+    Properties:
+      ImageId: '{{resolve:ssm:/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64}}'
+      InstanceType: !Ref InstanceType
+      IamInstanceProfile: !Ref InstanceProfileName
+      SourceDestCheck: false
+      NetworkInterfaces:
+        - AssociatePublicIpAddress: true
+          DeviceIndex: '0'
+          SubnetId: !Ref PublicSubnet
+          GroupSet:
+            - !Ref NatMinecraftSecurityGroup
+      UserData:
+        Fn::Base64:
+          Fn::Sub: |
+            #!/bin/bash
+            set -e
+
+            # 1. Configurar Swap (2 GB)
+            if [ ! -f /swapfile ]; then
+              fallocate -l 2G /swapfile || dd if=/dev/zero of=/swapfile bs=1M count=2048
+              chmod 600 /swapfile
+              mkswap /swapfile
+              swapon /swapfile
+              echo '/swapfile none swap sw 0 0' >> /etc/fstab
+            fi
+
+            # 2. Configurar reenvio IPv4
+            echo "net.ipv4.ip_forward = 1" > /etc/sysctl.d/99-nat.conf
+            echo "net.ipv4.ip_forward = 1" >> /etc/sysctl.conf
+            sysctl -p /etc/sysctl.d/99-nat.conf || sysctl -p
+
+            # 3. Configurar iptables NAT y Firewall
+            dnf install -y iptables-services iptables
+            systemctl enable iptables
+            systemctl start iptables
+
+            PRIMARY_IFACE=$(ip route show default | awk '{print $5}' | head -n1)
+            [ -z "$PRIMARY_IFACE" ] && PRIMARY_IFACE=eth0
+
+            iptables -F
+            iptables -t nat -F
+            iptables -t nat -A POSTROUTING -o "$PRIMARY_IFACE" -j MASQUERADE
+            iptables -A FORWARD -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+            iptables -A FORWARD -j ACCEPT
+
+            iptables -A INPUT -i lo -j ACCEPT
+            iptables -A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+            iptables -A INPUT -p tcp --dport 25565 -j ACCEPT
+            iptables -A INPUT -p udp --dport 25565 -j ACCEPT
+            iptables -A INPUT -p tcp --dport 25575 -j ACCEPT
+            iptables -A INPUT -s 10.0.0.0/16 -j ACCEPT
+            iptables-save > /etc/sysconfig/iptables
+
+            # 4. Instalar Java 21, SSM Agent y CloudWatch Agent
+            dnf install -y java-21-amazon-corretto-headless jq curl amazon-ssm-agent amazon-cloudwatch-agent tar gzip
+            systemctl enable --now amazon-ssm-agent
+
+            # 5. Instalar PurpurMC 1.21.4 y ViaVersion
+            mkdir -p /opt/minecraft/plugins
+            cd /opt/minecraft
+
+            curl -s -L -A "Mozilla/5.0" -o /opt/minecraft/server.jar "https://api.purpurmc.org/v2/purpur/1.21.4/latest/download"
+            curl -s -L -A "Mozilla/5.0" -o /opt/minecraft/plugins/ViaVersion.jar "https://github.com/ViaVersion/ViaVersion/releases/download/5.11.0/ViaVersion-5.11.0.jar"
+
+            echo "eula=true" > /opt/minecraft/eula.txt
+
+            cat << 'EOF_PROP' > /opt/minecraft/server.properties
+            server-port=25565
+            motd=\u00a7bDuoc UC Cloud Native \u00a7aMinecraft Enterprise
+            max-players=10
+            view-distance=6
+            simulation-distance=4
+            online-mode=false
+            enable-command-block=true
+            spawn-protection=0
+            enable-rcon=true
+            rcon.port=25575
+            rcon.password=${RconPassword}
+            broadcast-rcon-to-ops=false
+            EOF_PROP
+
+            # 6. Servicio Systemd Minecraft
+            cat << 'EOF_SVC' > /etc/systemd/system/minecraft.service
+            [Unit]
+            Description=Minecraft Server Purpur 1.21.4
+            After=network.target
+
+            [Service]
+            Type=simple
+            User=root
+            WorkingDirectory=/opt/minecraft
+            ExecStart=/usr/bin/java -Xms512M -Xmx850M -XX:+UseG1GC -jar /opt/minecraft/server.jar nogui
+            Restart=always
+            RestartSec=5
+
+            [Install]
+            WantedBy=multi-user.target
+            EOF_SVC
+
+            systemctl daemon-reload
+            systemctl enable --now minecraft
+
+            # 7. Script de Respaldo Automatizado a S3 Versionado
+            cat << 'EOF_BACKUP' > /opt/minecraft/backup-to-s3.sh
+            #!/bin/bash
+            BACKUP_NAME="world_backup_$(date +%Y%m%d_%H%M%S).tar.gz"
+            cd /opt/minecraft
+            if [ -d "world" ]; then
+              tar -czf "/tmp/$BACKUP_NAME" world world_nether world_the_end 2>/dev/null || tar -czf "/tmp/$BACKUP_NAME" world
+              aws s3 cp "/tmp/$BACKUP_NAME" "s3://${MinecraftBackupsBucket}/$BACKUP_NAME" --region ${AWS::Region} || true
+              rm -f "/tmp/$BACKUP_NAME"
+            fi
+            EOF_BACKUP
+            chmod +x /opt/minecraft/backup-to-s3.sh
+
+            # Configurar Cron cada 6 horas
+            echo "0 */6 * * * root /opt/minecraft/backup-to-s3.sh >/dev/null 2>&1" > /etc/cron.d/minecraft-backup
+      Tags:
+        - Key: Name
+          Value: !Sub ec2-${Environment}-${ProjectName}-nat-minecraft
+        - Key: Role
+          Value: NAT-and-GameServer
+
+  # ============================================================
+  # 8. RUTA PRIVADA 0.0.0.0/0 -> NAT INSTANCE
+  # ============================================================
+  NatRoute:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref PrivateRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      InstanceId: !Ref NatInstance
+
+  # ============================================================
+  # 9. BACKEND FLASK EC2 CON DYNAMODB Y JWT (Subred Privada 1)
+  # ============================================================
+  BackendInstance:
+    Type: AWS::EC2::Instance
+    DependsOn: NatRoute
+    Properties:
+      ImageId: '{{resolve:ssm:/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64}}'
+      InstanceType: !Ref InstanceType
+      IamInstanceProfile: !Ref InstanceProfileName
+      SubnetId: !Ref PrivateSubnet1
+      SecurityGroupIds:
+        - !Ref BackendSecurityGroup
+      UserData:
+        Fn::Base64:
+          Fn::Sub: |
+            #!/bin/bash
+            set -e
+
+            # 1. Swap 1GB
+            if [ ! -f /swapfile ]; then
+              fallocate -l 1G /swapfile || dd if=/dev/zero of=/swapfile bs=1M count=1024
+              chmod 600 /swapfile
+              mkswap /swapfile
+              swapon /swapfile
+              echo '/swapfile none swap sw 0 0' >> /etc/fstab
+            fi
+
+            # 2. Instalar dependencias a traves de la NAT
+            dnf update -y
+            dnf install -y python3 python3-pip amazon-ssm-agent sqlite docker
+            systemctl enable --now amazon-ssm-agent
+            systemctl enable --now docker
+
+            pip3 install flask flask-cors mcrcon requests boto3 PyJWT gunicorn
+
+            # 3. Desplegar aplicacion Flask
+            mkdir -p /opt/backend
+            cat << 'EOF_PY' > /opt/backend/app.py
+            from flask import Flask, jsonify, request
+            from flask_cors import CORS
+            from functools import wraps
+            import sqlite3
+            import datetime
+            import os
+            try:
+                import jwt
+            except ImportError:
+                jwt = None
+            try:
+                import boto3
+            except ImportError:
+                boto3 = None
+            try:
+                from mcrcon import MCRcon
+            except ImportError:
+                MCRcon = None
+
+            app = Flask(__name__)
+            CORS(app)
+
+            JWT_SECRET = "DuocCloudNativeSecretKey2026!"
+            ADMIN_USER = "admin"
+            ADMIN_PASS = "DuocAdmin2026!"
+            AWS_REGION = "${AWS::Region}"
+            DYNAMODB_TABLE = "UsuariosMinecraft"
+            MINECRAFT_HOST = "${NatInstance.PrivateIp}"
+            RCON_PORT = 25575
+            RCON_PASSWORD = "${RconPassword}"
+
+            USE_DYNAMODB = False
+            dynamo_table = None
+
+            if boto3:
+                try:
+                    dynamodb = boto3.resource("dynamodb", region_name=AWS_REGION)
+                    dynamo_table = dynamodb.Table(DYNAMODB_TABLE)
+                    dynamo_table.load()
+                    USE_DYNAMODB = True
+                except Exception as e:
+                    USE_DYNAMODB = False
+
+            def execute_rcon(command):
+                if not MCRcon:
+                    return "MCRcon no disponible"
+                try:
+                    with MCRcon(MINECRAFT_HOST, RCON_PASSWORD, port=RCON_PORT, timeout=5) as mcr:
+                        return mcr.command(command)
+                except Exception as e:
+                    return f"Error RCON: {str(e)}"
+
+            def admin_required(f):
+                @wraps(f)
+                def decorated(*args, **kwargs):
+                    auth_header = request.headers.get("Authorization")
+                    if not auth_header:
+                        return jsonify({"error": "Token requerido"}), 401
+                    try:
+                        token = auth_header.split(" ")[1] if " " in auth_header else auth_header
+                        if jwt:
+                            jwt.decode(token, JWT_SECRET, algorithms=["HS256"])
+                    except Exception as e:
+                        return jsonify({"error": "Token invalido"}), 401
+                    return f(*args, **kwargs)
+                return decorated
+
+            @app.route("/api/auth/login", methods=["POST"])
+            def login():
+                data = request.get_json() or {}
+                if data.get("username") == ADMIN_USER and data.get("password") == ADMIN_PASS:
+                    token = jwt.encode({"user": ADMIN_USER, "exp": datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(hours=8)}, JWT_SECRET, algorithm="HS256") if jwt else "demo-token"
+                    return jsonify({"mensaje": "OK", "token": token, "user": ADMIN_USER})
+                return jsonify({"error": "Credenciales invalidas"}), 401
+
+            @app.route("/api/saludo", methods=["GET"])
+            def saludo():
+                return jsonify({
+                    "mensaje": "Backend Enterprise con DynamoDB y RCON",
+                    "persistencia": "Amazon DynamoDB" if USE_DYNAMODB else "SQLite",
+                    "minecraft_host": MINECRAFT_HOST
+                })
+
+            @app.route("/api/usuarios", methods=["GET"])
+            def get_usuarios():
+                if USE_DYNAMODB and dynamo_table:
+                    try:
+                        return jsonify(dynamo_table.scan().get("Items", []))
+                    except Exception:
+                        pass
+                return jsonify([])
+
+            @app.route("/api/usuarios", methods=["POST"])
+            def create_usuario():
+                data = request.get_json() or {}
+                nombre = data.get("nombre", "").strip()
+                email = data.get("email", "").strip()
+                gamertag = data.get("gamertag", "").strip() or nombre
+
+                if not nombre or not email:
+                    return jsonify({"error": "Requerido nombre y email"}), 400
+
+                item = {"email": email, "id": int(datetime.datetime.now().timestamp()), "nombre": nombre, "gamertag": gamertag, "fecha_registro": datetime.datetime.now(datetime.timezone.utc).isoformat()}
+                if USE_DYNAMODB and dynamo_table:
+                    dynamo_table.put_item(Item=item)
+
+                rcon_res = execute_rcon(f"whitelist add {gamertag}")
+                return jsonify({"usuario": item, "minecraft_whitelist": rcon_res, "storage": "DynamoDB"}), 201
+
+            @app.route("/api/minecraft/status", methods=["GET"])
+            def mc_status():
+                resp = execute_rcon("list")
+                tps = execute_rcon("tps")
+                return jsonify({"minecraft_ip": "${NatInstance.PrivateIp}", "jugadores": resp, "tps": tps, "status": "Online"})
+
+            @app.route("/api/minecraft/command", methods=["POST"])
+            @admin_required
+            def mc_cmd():
+                cmd = (request.get_json() or {}).get("comando", "")
+                if cmd.startswith("/"): cmd = cmd[1:]
+                return jsonify({"comando": f"/{cmd}", "salida": execute_rcon(cmd), "timestamp": datetime.datetime.now().strftime("%H:%M:%S")})
+
+            @app.route("/api/minecraft/quick-command/<accion>", methods=["POST"])
+            @admin_required
+            def mc_quick(accion):
+                accs = {"day":"time set day","night":"time set night","sun":"weather clear","rain":"weather rain","creative":"gamemode creative @a","survival":"gamemode survival @a","tps":"tps","whitelist-list":"whitelist list","save":"save-all"}
+                cmd = accs.get(accion.lower(), "list")
+                return jsonify({"accion": accion, "salida": execute_rcon(cmd), "timestamp": datetime.datetime.now().strftime("%H:%M:%S")})
+
+            if __name__ == "__main__":
+                app.run(host="0.0.0.0", port=8081)
+            EOF_PY
+
+            # 4. Servicio Systemd
+            cat << 'EOF_BACKEND_SVC' > /etc/systemd/system/flask-backend.service
+            [Unit]
+            Description=Flask Backend API Enterprise
+            After=network.target
+
+            [Service]
+            Type=simple
+            User=root
+            WorkingDirectory=/opt/backend
+            ExecStart=/usr/bin/python3 /opt/backend/app.py
+            Restart=always
+            RestartSec=5
+
+            [Install]
+            WantedBy=multi-user.target
+            EOF_BACKEND_SVC
+
+            systemctl daemon-reload
+            systemctl enable --now flask-backend
+      Tags:
+        - Key: Name
+          Value: !Sub ec2-${Environment}-${ProjectName}-backend-private
+        - Key: Role
+          Value: BackendAPI
+
+  # ============================================================
+  # 10. CLOUDWATCH ALARM: AUTO-HEALING
+  # ============================================================
+  HighCpuAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmDescription: Alarma de sobrecarga de CPU en el Servidor de Minecraft
+      MetricName: CPUUtilization
+      Namespace: AWS/EC2
+      Statistic: Average
+      Period: 300
+      EvaluationPeriods: 2
+      Threshold: 90
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      Dimensions:
+        - Name: InstanceId
+          Value: !Ref NatInstance
+
+# ============================================================
+# OUTPUTS
+# ============================================================
+Outputs:
+  VpcId:
+    Description: ID de la VPC creada
+    Value: !Ref Vpc
+    Export:
+      Name: !Sub ${AWS::StackName}-VpcId
+
+  FrontendWebsiteUrl:
+    Description: URL del Sitio Web del Frontend en Amazon S3
+    Value: !GetAtt FrontendWebsiteBucket.WebsiteURL
+
+  MinecraftBackupsBucketName:
+    Description: Nombre del Bucket S3 versionado para respaldos
+    Value: !Ref MinecraftBackupsBucket
+
+  DynamoDBTableName:
+    Description: Nombre de la tabla DynamoDB para jugadores
+    Value: !Ref DynamoDBUsuarios
+
+  NatMinecraftPublicIp:
+    Description: IP Publica del Servidor de Minecraft
+    Value: !GetAtt NatInstance.PublicIp
+
+  BackendPrivateIp:
+    Description: IP Privada de la API Backend en Subred Privada
+    Value: !GetAtt BackendInstance.PrivateIp
+
+  SsmConnectMinecraft:
+    Description: Comando SSM para administrar Minecraft
+    Value: !Sub aws ssm start-session --target ${NatInstance}
+
+  SsmConnectBackend:
+    Description: Comando SSM para administrar Backend Privado
+    Value: !Sub aws ssm start-session --target ${BackendInstance}

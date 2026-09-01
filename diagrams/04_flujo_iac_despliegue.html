@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pipeline IaC Enterprise - CloudFormation vs Terraform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600;700&family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --paper: #090b10;
+      --paper-card: #131722;
+      --ink: #f0f2f8;
+      --ink-muted: #8c93a8;
+      --accent: #eb6c36;
+      --accent-soft: rgba(235, 108, 54, 0.12);
+      --teal: #38bdf8;
+      --purple: #a855f7;
+      --green: #4ade80;
+      --border: rgba(240, 242, 248, 0.1);
+      --font-sans: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'Geist Mono', monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--paper);
+      color: var(--ink);
+      font-family: var(--font-sans);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 2rem;
+    }
+
+    .diagram-card {
+      background: var(--paper-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem;
+      max-width: 1050px;
+      width: 100%;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    .header {
+      margin-bottom: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 1rem;
+    }
+
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--accent);
+      margin-bottom: 0.25rem;
+    }
+
+    h1 {
+      font-size: 1.4rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+
+    .meta-tag {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      background: rgba(168, 85, 247, 0.12);
+      color: var(--purple);
+      padding: 0.35rem 0.75rem;
+      border-radius: 999px;
+      border: 1px solid var(--purple);
+    }
+
+    .svg-container {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    svg {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="diagram-card">
+    <div class="header">
+      <div>
+        <div class="eyebrow">DEVOPS & INFRAESTRUCTURA COMO CÓDIGO (IaC)</div>
+        <h1>Pipeline de Despliegue Automatizado Enterprise</h1>
+      </div>
+      <span class="meta-tag">IaC Dual Completo</span>
+    </div>
+
+    <div class="svg-container">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 500" width="980" height="500">
+        <defs>
+          <marker id="arrow-accent" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#eb6c36"/>
+          </marker>
+          <marker id="arrow-purple" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#a855f7"/>
+          </marker>
+        </defs>
+
+        <!-- RAMA 1: CLOUDFORMATION -->
+        <g transform="translate(30, 45)">
+          <rect width="210" height="80" rx="8" fill="#131722" stroke="#eb6c36" stroke-width="1.5"/>
+          <text x="16" y="24" fill="#eb6c36" font-size="9" font-family="'Geist Mono', monospace" font-weight="700">1. AWS CLOUDFORMATION</text>
+          <text x="16" y="44" fill="#f0f2f8" font-size="11" font-family="'Geist', sans-serif" font-weight="600">cd-cloud-native-duoc.yaml</text>
+          <text x="16" y="60" fill="#8c93a8" font-size="7.5" font-family="'Geist Mono', monospace">Stack Declarativo Todo-en-Uno</text>
+        </g>
+
+        <path d="M 240 85 H 305" fill="none" stroke="#eb6c36" stroke-width="1.5" marker-end="url(#arrow-accent)"/>
+
+        <g transform="translate(315, 45)">
+          <rect width="265" height="80" rx="8" fill="#181d2c" stroke="#eb6c36" stroke-width="1.5"/>
+          <text x="16" y="24" fill="#eb6c36" font-size="9" font-family="'Geist Mono', monospace" font-weight="700">2. VALIDACIÓN & DESPLIEGUE</text>
+          <text x="16" y="44" fill="#f0f2f8" font-size="8.5" font-family="'Geist Mono', monospace">aws cloudformation validate-template</text>
+          <text x="16" y="58" fill="#f0f2f8" font-size="8.5" font-family="'Geist Mono', monospace">aws cloudformation create-stack</text>
+        </g>
+
+        <path d="M 580 85 H 645" fill="none" stroke="#eb6c36" stroke-width="1.5" marker-end="url(#arrow-accent)"/>
+
+
+        <!-- RAMA 2: TERRAFORM -->
+        <g transform="translate(30, 195)">
+          <rect width="210" height="80" rx="8" fill="#131722" stroke="#a855f7" stroke-width="1.5"/>
+          <text x="16" y="24" fill="#a855f7" font-size="9" font-family="'Geist Mono', monospace" font-weight="700">1. HASHICORP TERRAFORM</text>
+          <text x="16" y="44" fill="#f0f2f8" font-size="11" font-family="'Geist', sans-serif" font-weight="600">terraform/ (4 Módulos)</text>
+          <text x="16" y="60" fill="#8c93a8" font-size="7.5" font-family="'Geist Mono', monospace">networking, storage, security, compute</text>
+        </g>
+
+        <path d="M 240 235 H 305" fill="none" stroke="#a855f7" stroke-width="1.5" marker-end="url(#arrow-purple)"/>
+
+        <g transform="translate(315, 195)">
+          <rect width="265" height="80" rx="8" fill="#181d2c" stroke="#a855f7" stroke-width="1.5"/>
+          <text x="16" y="24" fill="#a855f7" font-size="9" font-family="'Geist Mono', monospace" font-weight="700">2. PLAN & APPLY MODULAR</text>
+          <text x="16" y="44" fill="#f0f2f8" font-size="8.5" font-family="'Geist Mono', monospace">terraform init (AWS Provider ~> 5.0)</text>
+          <text x="16" y="58" fill="#f0f2f8" font-size="8.5" font-family="'Geist Mono', monospace">terraform apply -auto-approve</text>
+        </g>
+
+        <path d="M 580 235 H 645" fill="none" stroke="#a855f7" stroke-width="1.5" marker-end="url(#arrow-purple)"/>
+
+
+        <!-- DESTINO: RECURSOS EMPRESARIALES CREADOS EN AWS -->
+        <g transform="translate(655, 40)">
+          <rect width="295" height="240" rx="10" fill="#15241e" stroke="#4ade80" stroke-width="2"/>
+          <rect x="0" y="0" width="295" height="30" rx="10" fill="rgba(74, 222, 128, 0.15)"/>
+          <text x="147" y="19" fill="#4ade80" font-size="10" font-family="'Geist Mono', monospace" font-weight="700" text-anchor="middle">RECURSOS APROVISIONADOS EN AWS</text>
+
+          <text x="16" y="50" fill="#f0f2f8" font-size="8.5" font-family="'Geist', sans-serif" font-weight="600">🌐 VPC (10.0.0.0/16) + 3 Subredes + NAT Instance</text>
+          <text x="16" y="68" fill="#a855f7" font-size="8.5" font-family="'Geist', sans-serif" font-weight="600">⚡ Tabla NoSQL DynamoDB (UsuariosMinecraft)</text>
+          <text x="16" y="86" fill="#38bdf8" font-size="8.5" font-family="'Geist', sans-serif" font-weight="600">🌐 Bucket S3 Frontend (Static Website Hosting)</text>
+          <text x="16" y="104" fill="#eb6c36" font-size="8.5" font-family="'Geist', sans-serif" font-weight="600">📦 Bucket S3 Backups Versionado (Enabled)</text>
+          <text x="16" y="122" fill="#f0f2f8" font-size="8.5" font-family="'Geist', sans-serif" font-weight="600">🎮 EC2 Minecraft Purpur 1.21.4 + ViaVersion</text>
+          <text x="16" y="140" fill="#4ade80" font-size="8.5" font-family="'Geist', sans-serif" font-weight="600">🐍 EC2 Backend Flask en Subred Privada + Docker</text>
+          <text x="16" y="158" fill="#38bdf8" font-size="8.5" font-family="'Geist', sans-serif" font-weight="600">📈 CloudWatch Agent + Alarma Auto-Healing</text>
+          <text x="16" y="176" fill="#f0f2f8" font-size="8.5" font-family="'Geist', sans-serif" font-weight="600">🔐 SSM Parameter Store (/minecraft/rcon_password)</text>
+          <text x="16" y="194" fill="#8c93a8" font-size="8" font-family="'Geist Mono', monospace">✓ IAM LabInstanceProfile • Sin Puertos SSH 22</text>
+          <text x="16" y="210" fill="#4ade80" font-size="8" font-family="'Geist Mono', monospace">✓ Despliegue 100% Autónomo y Reproducible</text>
+        </g>
+
+        <!-- BANNER DE BUENAS PRÁCTICAS -->
+        <g transform="translate(30, 310)">
+          <rect width="920" height="150" rx="10" fill="#121622" stroke="rgba(240,242,248,0.15)" stroke-width="1"/>
+          <text x="24" y="28" fill="#38bdf8" font-size="10" font-family="'Geist Mono', monospace" font-weight="700">💡 PILARES DE ARQUITECTURA CLOUD NATIVE APLICADOS</text>
+          <text x="24" y="52" fill="#f0f2f8" font-size="9" font-family="'Geist', sans-serif">• <strong>Seguridad en Profundidad:</strong> Backend aislado en subred privada sin IP pública, credenciales en SSM y tokens JWT.</text>
+          <text x="24" y="72" fill="#f0f2f8" font-size="9" font-family="'Geist', sans-serif">• <strong>Alta Disponibilidad y Respaldo:</strong> S3 con versionamiento para evitar pérdida del mundo y DynamoDB NoSQL.</text>
+          <text x="24" y="92" fill="#f0f2f8" font-size="9" font-family="'Geist', sans-serif">• <strong>Observabilidad Proactiva:</strong> Monitoreo de RAM y Swap con CloudWatch Agent y alarmas de sobrecarga.</text>
+          <text x="24" y="112" fill="#f0f2f8" font-size="9" font-family="'Geist', sans-serif">• <strong>Infraestructura como Código Modular:</strong> Módulos reutilizables validados con Terraform y CloudFormation.</text>
+        </g>
+
+      </svg>
+    </div>
+  </div>
+
+</body>
+</html>

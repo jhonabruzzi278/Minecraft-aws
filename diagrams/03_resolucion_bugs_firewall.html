@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flujo de Diagnóstico y Resolución de Errores</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600&family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --paper: #0f111a;
+      --paper-card: #181b26;
+      --ink: #f0f2f8;
+      --ink-muted: #8c93a8;
+      --accent: #eb6c36;
+      --accent-soft: rgba(235, 108, 54, 0.12);
+      --teal: #38bdf8;
+      --green: #4ade80;
+      --red: #f87171;
+      --border: rgba(240, 242, 248, 0.1);
+      --font-sans: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'Geist Mono', monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--paper);
+      color: var(--ink);
+      font-family: var(--font-sans);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 2rem;
+    }
+
+    .diagram-card {
+      background: var(--paper-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem;
+      max-width: 960px;
+      width: 100%;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    .header {
+      margin-bottom: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 1rem;
+    }
+
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--accent);
+      margin-bottom: 0.25rem;
+    }
+
+    h1 {
+      font-size: 1.4rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+
+    .meta-tag {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      background: var(--accent-soft);
+      color: var(--accent);
+      padding: 0.35rem 0.75rem;
+      border-radius: 999px;
+      border: 1px solid var(--accent);
+    }
+
+    .svg-container {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    svg {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="diagram-card">
+    <div class="header">
+      <div>
+        <div class="eyebrow">TROUBLESHOOTING RUNBOOK • DIAGNÓSTICO</div>
+        <h1>Resolución de Errores de Conexión y Compatibilidad</h1>
+      </div>
+      <span class="meta-tag">Metodología DevOps</span>
+    </div>
+
+    <div class="svg-container">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 500" width="880" height="500">
+        <defs>
+          <marker id="arrow" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#8c93a8"/>
+          </marker>
+          <marker id="arrow-green" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#4ade80"/>
+          </marker>
+          <marker id="arrow-red" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#f87171"/>
+          </marker>
+        </defs>
+
+        <!-- ==================== FASE 1: ERROR GETSOCKOPT (FIREWALL) ==================== -->
+        
+        <!-- Bloque 1: Intento inicial -->
+        <g transform="translate(40, 50)">
+          <rect width="180" height="70" rx="8" fill="#181b26" stroke="rgba(240,242,248,0.2)" stroke-width="1.2"/>
+          <text x="90" y="26" fill="#f0f2f8" font-size="10" font-family="'Geist', sans-serif" font-weight="600" text-anchor="middle">1. Intento de Conexión</text>
+          <text x="90" y="44" fill="#8c93a8" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">Cliente Minecraft ➔ 54.81.175.12</text>
+          <text x="90" y="58" fill="#38bdf8" font-size="7.5" font-family="'Geist Mono', monospace" text-anchor="middle">Puerto: 25565 TCP</text>
+        </g>
+
+        <!-- Flecha 1 -> 2 -->
+        <path d="M 220 85 H 270" fill="none" stroke="#f87171" stroke-width="1.5" marker-end="url(#arrow-red)"/>
+
+        <!-- Bloque 2: Error getsockopt -->
+        <g transform="translate(280, 50)">
+          <rect width="200" height="70" rx="8" fill="#2a1b1e" stroke="#f87171" stroke-width="1.5"/>
+          <text x="100" y="24" fill="#f87171" font-size="10" font-family="'Geist', sans-serif" font-weight="700" text-anchor="middle">⚠️ Error de Timeout</text>
+          <text x="100" y="42" fill="#f0f2f8" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">Connection timed out</text>
+          <text x="100" y="56" fill="#8c93a8" font-size="7.5" font-family="'Geist Mono', monospace" text-anchor="middle">Causa: iptables REJECT en Linux</text>
+        </g>
+
+        <!-- Flecha 2 -> 3 -->
+        <path d="M 480 85 H 530" fill="none" stroke="#8c93a8" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+        <!-- Bloque 3: Diagnóstico y Solución Firewall -->
+        <g transform="translate(540, 45)">
+          <rect width="280" height="80" rx="8" fill="#181b26" stroke="#4ade80" stroke-width="1.5"/>
+          <text x="14" y="22" fill="#4ade80" font-size="9" font-family="'Geist Mono', monospace" font-weight="700">✓ SOLUCIÓN FIREWALL (IPTABLES)</text>
+          <text x="14" y="40" fill="#f0f2f8" font-size="8" font-family="'Geist Mono', monospace">• iptables -I INPUT 1 -p tcp --dport 25565 -j ACCEPT</text>
+          <text x="14" y="54" fill="#f0f2f8" font-size="8" font-family="'Geist Mono', monospace">• iptables-save > /etc/sysconfig/iptables</text>
+          <text x="14" y="68" fill="#8c93a8" font-size="7.5" font-family="'Geist Mono', monospace">Validado con Test-NetConnection (True)</text>
+        </g>
+
+        <!-- Conector hacia abajo a Fase 2 -->
+        <path d="M 680 125 V 200 Q 680 210 670 210 H 130 Q 120 210 120 220 V 240" fill="none" stroke="#8c93a8" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+
+        <!-- ==================== FASE 2: ERROR DE VERSIÓN (OUTDATED SERVER) ==================== -->
+
+        <!-- Bloque 4: Segundo intento -->
+        <g transform="translate(40, 250)">
+          <rect width="180" height="70" rx="8" fill="#181b26" stroke="rgba(240,242,248,0.2)" stroke-width="1.2"/>
+          <text x="90" y="26" fill="#f0f2f8" font-size="10" font-family="'Geist', sans-serif" font-weight="600" text-anchor="middle">2. Tráfico Llega al Servidor</text>
+          <text x="90" y="44" fill="#4ade80" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">Handshake TCP Exitoso</text>
+          <text x="90" y="58" fill="#8c93a8" font-size="7.5" font-family="'Geist Mono', monospace" text-anchor="middle">Validación de Protocolo Minecraft</text>
+        </g>
+
+        <!-- Flecha 4 -> 5 -->
+        <path d="M 220 285 H 270" fill="none" stroke="#eb6c36" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+        <!-- Bloque 5: Error Outdated Server -->
+        <g transform="translate(280, 250)">
+          <rect width="200" height="70" rx="8" fill="#2a1f1b" stroke="#eb6c36" stroke-width="1.5"/>
+          <text x="100" y="24" fill="#eb6c36" font-size="10" font-family="'Geist', sans-serif" font-weight="700" text-anchor="middle">⚠️ Versión Incompatible</text>
+          <text x="100" y="42" fill="#f0f2f8" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">Outdated server! (1.21.1)</text>
+          <text x="100" y="56" fill="#8c93a8" font-size="7.5" font-family="'Geist Mono', monospace" text-anchor="middle">Cliente ejecutaba versión 1.21.4</text>
+        </g>
+
+        <!-- Flecha 5 -> 6 -->
+        <path d="M 480 285 H 530" fill="none" stroke="#8c93a8" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+        <!-- Bloque 6: Solución ViaVersion + Update -->
+        <g transform="translate(540, 245)">
+          <rect width="280" height="80" rx="8" fill="#181b26" stroke="#eb6c36" stroke-width="1.5"/>
+          <text x="14" y="22" fill="#eb6c36" font-size="9" font-family="'Geist Mono', monospace" font-weight="700">✓ COMPATIBILIDAD MULTIVERSION</text>
+          <text x="14" y="40" fill="#f0f2f8" font-size="8" font-family="'Geist Mono', monospace">• Actualización a Purpur 1.21.4 (Java 21)</text>
+          <text x="14" y="54" fill="#f0f2f8" font-size="8" font-family="'Geist Mono', monospace">• Instalación Plugin ViaVersion (v5.11.0)</text>
+          <text x="14" y="68" fill="#8c93a8" font-size="7.5" font-family="'Geist Mono', monospace">Soporta clientes 1.20.x hasta 1.21.4+</text>
+        </g>
+
+
+        <!-- ==================== FASE 3: RESULTADO FINAL OPERATIVO ==================== -->
+
+        <!-- Flecha 6 -> Final -->
+        <path d="M 680 325 V 390 Q 680 400 670 400 H 450" fill="none" stroke="#4ade80" stroke-width="1.8" marker-end="url(#arrow-green)"/>
+
+        <!-- Bloque 7: Éxito Final -->
+        <g transform="translate(180, 365)">
+          <rect width="260" height="70" rx="10" fill="#1b2a22" stroke="#4ade80" stroke-width="2"/>
+          <text x="130" y="28" fill="#4ade80" font-size="11" font-family="'Geist', sans-serif" font-weight="700" text-anchor="middle">🎉 SERVIDOR 100% OPERATIVO</text>
+          <text x="130" y="46" fill="#f0f2f8" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">54.81.175.12:25565</text>
+          <text x="130" y="58" fill="#8c93a8" font-size="7.5" font-family="'Geist Mono', monospace" text-anchor="middle">Conexión Fluida, Chunks Generados y Seguro</text>
+        </g>
+
+      </svg>
+    </div>
+  </div>
+
+</body>
+</html>

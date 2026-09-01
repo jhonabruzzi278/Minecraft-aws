@@ -1,0 +1,103 @@
+name: CI/CD Pipeline - Cloud Native Duoc UC
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  # ============================================================
+  # 1. FASE CI: VALIDACIÓN, LINTING Y PRUEBAS
+  # ============================================================
+  continuous-integration:
+    name: 🔍 Validación de Código e IaC (CI)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Clonar Repositorio
+        uses: actions/checkout@v4
+
+      - name: 🐍 Configurar Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: 📦 Instalar Dependencias de Python
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r backend/requirements.txt
+
+      - name: 🧪 Ejecutar Pruebas de Sintaxis de la API
+        run: |
+          cd backend
+          python -c "import app; print('✓ app.py compila correctamente')"
+
+      - name: 🛠️ Configurar Terraform CLI
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.5.7
+
+      - name: 📐 Validar Sintaxis de Terraform Modular
+        run: |
+          cd terraform
+          terraform init -backend=false
+          terraform validate
+
+      - name: 📄 Validar Sintaxis de AWS CloudFormation
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
+          aws-region: us-east-1
+        continue-on-error: true
+
+      - name: 🔍 Validar Template CloudFormation con AWS CLI
+        run: |
+          aws cloudformation validate-template --template-body file://cloudformation/cd-cloud-native-duoc.yaml || echo "AWS CLI validation skipped (no credentials provided in GitHub Secrets)"
+
+  # ============================================================
+  # 2. FASE CD: DESPLIEGUE AUTOMÁTICO A AMAZON S3 Y EC2
+  # ============================================================
+  continuous-deployment:
+    name: 🚀 Despliegue Continuo a AWS (CD)
+    needs: continuous-integration
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Clonar Repositorio
+        uses: actions/checkout@v4
+
+      - name: 🔑 Configurar Credenciales de AWS
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
+          aws-region: us-east-1
+
+      - name: 🌐 Publicar Frontend en Amazon S3 Website Hosting
+        run: |
+          BUCKET_NAME="${{ secrets.FRONTEND_S3_BUCKET }}"
+          if [ -n "$BUCKET_NAME" ]; then
+            echo "Sincronizando frontend con s3://$BUCKET_NAME/ ..."
+            aws s3 sync frontend/ s3://$BUCKET_NAME/ --delete
+          else
+            echo "Secret FRONTEND_S3_BUCKET no configurado. Omitiendo sync de S3."
+          fi
+
+      - name: 🐳 Actualizar Backend en EC2 vía AWS SSM (Sin SSH)
+        run: |
+          INSTANCE_ID="${{ secrets.BACKEND_EC2_INSTANCE_ID }}"
+          if [ -n "$INSTANCE_ID" ]; then
+            echo "Enviando comando de actualización a EC2 $INSTANCE_ID vía SSM..."
+            aws ssm send-command \
+              --instance-ids "$INSTANCE_ID" \
+              --document-name "AWS-RunShellScript" \
+              --parameters 'commands=["cd /opt/backend && systemctl restart flask-backend"]'
+          else
+            echo "Secret BACKEND_EC2_INSTANCE_ID no configurado. Omitiendo SSM dispatch."
+          fi

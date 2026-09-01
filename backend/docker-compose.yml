@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  backend-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: duoc-minecraft-backend
+    restart: always
+    ports:
+      - "8081:8081"
+    environment:
+      - AWS_REGION=us-east-1
+      - DYNAMODB_TABLE=UsuariosMinecraft
+      - MINECRAFT_HOST=54.81.175.12
+      - RCON_PORT=25575
+      - RCON_PASSWORD=DuocCloudNative2026!
+      - ADMIN_USER=admin
+      - ADMIN_PASS=DuocAdmin2026!
+      - JWT_SECRET=DuocCloudNativeSecretKey2026!
+    volumes:
+      - ./data:/app/data

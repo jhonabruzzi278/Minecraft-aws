@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Cloud Native Enterprise • Servidor Minecraft & DynamoDB</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600;700&family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div class="app-wrapper">
+        <!-- Header Principal -->
+        <header class="main-header">
+            <div class="header-content">
+                <div class="badge-group">
+                    <span class="badge">Duoc UC • Cloud Native Enterprise</span>
+                    <span class="badge-tag" id="storage-badge">Storage: DynamoDB</span>
+                </div>
+                <h1>Panel de Control & Consola de Minecraft</h1>
+                <p class="subtitle">Frontend Serverless • Backend en Subred Privada • Consola RCON en Tiempo Real</p>
+            </div>
+            <div class="header-actions">
+                <div class="status-indicator">
+                    <span class="pulse-dot"></span>
+                    <span id="backend-status-text">Backend: Conectando...</span>
+                </div>
+                <button id="btn-auth-toggle" class="btn btn-auth">
+                    <span id="auth-icon">🔒</span> <span id="auth-text">Login Admin</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Grilla de Tarjetas -->
+        <main class="dashboard-grid">
+            
+            <!-- Tarjeta 1: Estado del Servidor Minecraft -->
+            <section class="card mc-card">
+                <div class="card-header">
+                    <div class="card-icon">⛏️</div>
+                    <div>
+                        <h2>Servidor de Minecraft</h2>
+                        <span class="card-meta">PurpurMC 1.21.4 (Subred Pública)</span>
+                    </div>
+                </div>
+
+                <div class="mc-stats">
+                    <div class="stat-box">
+                        <span class="stat-label">DIRECCIÓN IP</span>
+                        <span class="stat-value" id="mc-ip">54.81.175.12:25565</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-label">ESTADO DE RED</span>
+                        <span class="stat-value text-green" id="mc-state">En Línea</span>
+                    </div>
+                </div>
+
+                <div class="console-box" id="mc-players-box">
+                    <code>Consultando jugadores vía RCON...</code>
+                </div>
+
+                <button id="btn-refrescar-mc" class="btn btn-secondary">Actualizar Estado</button>
+            </section>
+
+            <!-- Tarjeta 2: Registro de Jugadores (DynamoDB / SQLite) -->
+            <section class="card form-card">
+                <div class="card-header">
+                    <div class="card-icon">➕</div>
+                    <div>
+                        <h2>Registrar Jugador</h2>
+                        <span class="card-meta">Persistencia NoSQL + Auto-Whitelist</span>
+                    </div>
+                </div>
+
+                <form id="form-crear">
+                    <div class="input-group">
+                        <label for="input-nombre">Nombre Completo</label>
+                        <input type="text" id="input-nombre" placeholder="Ej. Jonathan Guerra" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="input-email">Correo Electrónico</label>
+                        <input type="email" id="input-email" placeholder="ejemplo@duocuc.cl" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="input-gamertag">Gamertag (Usuario Minecraft)</label>
+                        <input type="text" id="input-gamertag" placeholder="Nombre en el juego" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" id="btn-submit">
+                        <span>Registrar y Dar Whitelist</span>
+                    </button>
+                </form>
+
+                <div id="mensaje" class="alert-message"></div>
+            </section>
+
+            <!-- Tarjeta 3: Lista de Usuarios Registrados -->
+            <section class="card list-card">
+                <div class="card-header">
+                    <div class="card-icon">👥</div>
+                    <div>
+                        <h2>Jugadores Registrados</h2>
+                        <span class="card-meta">Amazon DynamoDB / SQLite</span>
+                    </div>
+                    <button id="btn-consultar" class="btn btn-sm">Refrescar</button>
+                </div>
+
+                <ul id="lista-usuarios" class="user-list">
+                    <li class="user-item loading">Cargando usuarios...</li>
+                </ul>
+            </section>
+
+        </main>
+
+        <!-- SECCIÓN 4: CONSOLA RCON INTERACTIVA (FULL WIDTH) -->
+        <section class="card console-section">
+            <div class="card-header">
+                <div class="card-icon">💻</div>
+                <div>
+                    <h2>Consola RCON Interactiva del Servidor</h2>
+                    <span class="card-meta">Gestión en tiempo real con permisos de Administrador</span>
+                </div>
+                <div class="admin-badge" id="admin-badge">Modo Administrador Requerido</div>
+            </div>
+
+            <!-- Botones Rápidos -->
+            <div class="quick-actions">
+                <button class="btn-quick" data-action="day">☀️ Día</button>
+                <button class="btn-quick" data-action="night">🌙 Noche</button>
+                <button class="btn-quick" data-action="sun">☀️ Despejado</button>
+                <button class="btn-quick" data-action="rain">🌧️ Lluvia</button>
+                <button class="btn-quick" data-action="creative">👑 Creativo @a</button>
+                <button class="btn-quick" data-action="survival">⚔️ Supervivencia @a</button>
+                <button class="btn-quick" data-action="tps">⚡ Ver TPS</button>
+                <button class="btn-quick" data-action="whitelist-list">📜 Whitelist</button>
+                <button class="btn-quick btn-backup" id="btn-trigger-backup">📦 Respaldo a S3</button>
+            </div>
+
+            <!-- Terminal Output -->
+            <div class="terminal-container" id="terminal-screen">
+                <div class="terminal-line system-line">[SISTEMA] Consola RCON lista. Inicia sesión como administrador para enviar comandos.</div>
+            </div>
+
+            <!-- Input de Comando Libre -->
+            <form id="form-command" class="terminal-input-bar">
+                <span class="terminal-prompt">&gt;</span>
+                <input type="text" id="input-command" placeholder="Escribe un comando de Minecraft (ej: /give @a diamond 64 o /weather clear)..." autocomplete="off">
+                <button type="submit" class="btn btn-send" id="btn-send-cmd">Ejecutar</button>
+            </form>
+        </section>
+
+        <!-- MODAL DE LOGIN ADMIN -->
+        <div id="modal-login" class="modal-overlay hidden">
+            <div class="modal-card">
+                <div class="modal-header">
+                    <h3>🔐 Iniciar Sesión de Administrador</h3>
+                    <button id="btn-close-modal" class="btn-close">&times;</button>
+                </div>
+                <form id="form-login">
+                    <div class="input-group">
+                        <label for="admin-user">Usuario</label>
+                        <input type="text" id="admin-user" value="admin" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="admin-pass">Contraseña</label>
+                        <input type="password" id="admin-pass" value="DuocAdmin2026!" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Autenticar con JWT</button>
+                </form>
+                <div id="login-error" class="alert-message alert-error"></div>
+            </div>
+        </div>
+
+        <footer class="app-footer">
+            <p>Laboratorio Cloud Native • Duoc UC • AWS 3-Tier Enterprise Architecture</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

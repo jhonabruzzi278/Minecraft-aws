@@ -18,6 +18,8 @@ const btnRefrescarMc = document.getElementById("btn-refrescar-mc");
 const mcPlayersBox = document.getElementById("mc-players-box");
 const backendStatusText = document.getElementById("backend-status-text");
 const storageBadge = document.getElementById("storage-badge");
+const mcIpText = document.getElementById("mc-ip");
+
 
 // Elementos de la Consola RCON
 const terminalScreen = document.getElementById("terminal-screen");

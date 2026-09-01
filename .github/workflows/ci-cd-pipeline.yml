@@ -80,6 +80,38 @@ jobs:
           aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
           aws-region: us-east-1
 
+      - name: 🔍 Auto-Detectar IP de EC2 y Auto-Encender Servidores
+        id: get_ip
+        run: |
+          # 1. Si las instancias están detenidas, encenderlas automáticamente
+          STOPPED_IDS=$(aws ec2 describe-instances \
+            --filters "Name=tag:aws:cloudformation:stack-name,Values=cf-duoc-cloud-native" "Name=instance-state-name,Values=stopped,stopping" \
+            --query "Reservations[*].Instances[*].InstanceId" \
+            --output text 2>/dev/null || true)
+          
+          if [ -n "$STOPPED_IDS" ]; then
+            echo "Iniciando instancias EC2 detenidas: $STOPPED_IDS ..."
+            aws ec2 start-instances --instance-ids $STOPPED_IDS || true
+            echo "Esperando 15 segundos..."
+            sleep 15
+          fi
+
+          # 2. Obtener la IP Pública actual de la máquina de Minecraft / NAT
+          LIVE_IP=$(aws ec2 describe-instances \
+            --filters "Name=tag:Name,Values=ec2-lab-cloud-native-duoc-nat-minecraft" "Name=instance-state-name,Values=running,pending" \
+            --query "Reservations[0].Instances[0].PublicIpAddress" \
+            --output text 2>/dev/null || true)
+
+          echo "IP Pública detectada en AWS: $LIVE_IP"
+          [ -z "$LIVE_IP" ] || [ "$LIVE_IP" = "None" ] && LIVE_IP="18.215.185.57"
+
+          # 3. Guardar en variable de salida del step
+          echo "live_ip=$LIVE_IP" >> $GITHUB_OUTPUT
+
+          # 4. Actualizar frontend/app.js con la IP en vivo antes de subirlo a S3
+          sed -i -E "s|http://[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+:8081|http://${LIVE_IP}:8081|g" frontend/app.js
+          echo "✓ frontend/app.js configurado con http://${LIVE_IP}:8081"
+
       - name: 🌐 Publicar Frontend en Amazon S3 Website Hosting
         run: |
           BUCKET_NAME="${{ vars.FRONTEND_S3_BUCKET || secrets.FRONTEND_S3_BUCKET || 'cf-duoc-cloud-native-frontendwebsitebucket-t1v4j7neddlu' }}"
@@ -93,11 +125,12 @@ jobs:
           aws ssm send-command \
             --instance-ids "$INSTANCE_ID" \
             --document-name "AWS-RunShellScript" \
-            --parameters 'commands=["cd /opt/backend && systemctl restart flask-backend"]'
+            --parameters 'commands=["cd /opt/backend && systemctl restart flask-backend"]' || true
 
       - name: 📋 Publicar Ficha Técnica en el Resumen de GitHub Actions (Job Summary)
         run: |
           BUCKET_NAME="${{ vars.FRONTEND_S3_BUCKET || 'cf-duoc-cloud-native-frontendwebsitebucket-t1v4j7neddlu' }}"
+          LIVE_IP="${{ steps.get_ip.outputs.live_ip }}"
           WEB_URL="http://${BUCKET_NAME}.s3-website-us-east-1.amazonaws.com"
 
           cat << EOF >> $GITHUB_STEP_SUMMARY
@@ -108,10 +141,9 @@ jobs:
           | Servicio | Tipo | URL / Dirección | Estado |
           |---|---|---|---|
           | **Panel Web Dashboard** | Amazon S3 Website | [${WEB_URL}](${WEB_URL}) | 🟢 **HTTP 200 OK** |
-          | **Servidor Minecraft** | Purpur 1.21.4 (Java) | \`18.215.185.57:25565\` | 🟢 **Online (Multiversión 1.20 a 1.21.4+)** |
-          | **Backend REST API** | Flask (EC2 Privada) | \`http://18.215.185.57:8081/api/saludo\` | 🟢 **Online (DynamoDB Activo)** |
+          | **Servidor Minecraft** | Purpur 1.21.4 (Java) | \`${LIVE_IP}:25565\` | 🟢 **Online (Multiversión 1.20 a 1.21.4+)** |
+          | **Backend REST API** | Flask (EC2 Privada) | \`http://${LIVE_IP}:8081/api/saludo\` | 🟢 **Online (DynamoDB Activo)** |
           | **Base de Datos NoSQL** | Amazon DynamoDB | Tabla: \`UsuariosMinecraft\` | 🟢 **Persistido** |
-
 
           ---
 

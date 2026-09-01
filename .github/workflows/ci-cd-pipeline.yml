@@ -118,6 +118,21 @@ jobs:
           echo "Sincronizando frontend con s3://$BUCKET_NAME/ ..."
           aws s3 sync frontend/ s3://$BUCKET_NAME/ --delete
 
+      - name: ⛏️ Configurar Compatibilidad Offline para SKlauncher en Minecraft
+        run: |
+          NAT_ID=$(aws ec2 describe-instances \
+            --filters "Name=tag:Name,Values=ec2-lab-cloud-native-duoc-nat-minecraft" "Name=instance-state-name,Values=running" \
+            --query "Reservations[0].Instances[0].InstanceId" \
+            --output text 2>/dev/null || true)
+
+          if [ -n "$NAT_ID" ] && [ "$NAT_ID" != "None" ]; then
+            echo "Configurando online-mode=false en la instancia de Minecraft $NAT_ID..."
+            aws ssm send-command \
+              --instance-ids "$NAT_ID" \
+              --document-name "AWS-RunShellScript" \
+              --parameters 'commands=["sed -i s/online-mode=true/online-mode=false/g /opt/minecraft/server.properties", "systemctl restart purpur"]' || true
+          fi
+
       - name: 🐳 Actualizar Backend en EC2 vía AWS SSM (Sin SSH)
         run: |
           INSTANCE_ID="${{ secrets.BACKEND_EC2_INSTANCE_ID || vars.BACKEND_EC2_INSTANCE_ID || 'i-0dfed23a838b96dcc' }}"
@@ -126,6 +141,7 @@ jobs:
             --instance-ids "$INSTANCE_ID" \
             --document-name "AWS-RunShellScript" \
             --parameters 'commands=["cd /opt/backend && systemctl restart flask-backend"]' || true
+
 
       - name: 📋 Publicar Ficha Técnica en el Resumen de GitHub Actions (Job Summary)
         run: |
